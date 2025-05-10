@@ -1,0 +1,187 @@
+/*
+Theme Name: 	   SoftMe
+Text Domain: 	   softme
+Version:            1.0.38
+Tested up to:       6.4
+Requires at least:  4.7
+Requires PHP:       5.6
+Author:             DesertThemes
+Author URI:         https://desertthemes.com/
+Theme URI:          https://desertthemes.com/themes/softme-free/
+Description:        SoftMe is a lightweight, stunning, professional and flexible WordPress Theme. SoftMe is perfect for Startup, IT Solutions, IT Business, Agencies, Marketing, Consulting and Services Company related to any business websites. SoftMe based on in-depth research into IT Solutions, IT Services, IT Business, Consulting & Software, Digital Solution, Technical Engineering, Technology, and Services Company, to deliver all needed layouts and blocks. It will enable you to create almost any type of website with a beautiful & professional design. SoftMe Pro demo https://preview.desertthemes.com/pro/softme/
+Tags:               one-column, two-columns ,right-sidebar, flexible-header, custom-background, custom-header, custom-menu, editor-style, featured-images, footer-widgets, post-formats, theme-options, threaded-comments, translation-ready, full-width-template, custom-logo, blog, e-commerce, portfolio
+License: GPLv3 or later
+License URI:  https://www.gnu.org/licenses/gpl-3.0.html
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned
+with others.
+ */
+ 
+ .dt_service--two .dt_item_inner .dt_item_holder .dt_item_icon i {
+    color: var(--dt-whi-color);
+    font-size: 36px;
+    line-height: 2;
+}
+
+.dt_pagetitle .dt_pagetitle_content .rank-math-breadcrumb,
+.dt_pagetitle .dt_pagetitle_content > span {
+    display: inline-block;
+    color: var(--dt-whi-color);
+    font-size: 2.8rem;
+    position: relative;
+    z-index: 1;
+}
+
+.dt_pagetitle .dt_pagetitle_content .rank-math-breadcrumb a,
+.dt_pagetitle .dt_pagetitle_content > span a {
+    color: var(--dt-whi-color);
+}
+
+.dt_pagetitle .dt_pagetitle_content .rank-math-breadcrumb a:not(:hover, :focus),
+.dt_pagetitle .dt_pagetitle_content > span a:not(:hover, :focus) {
+    text-decoration: none;
+}
+
+.dt_pagetitle .dt_pagetitle_content .rank-math-breadcrumb .separator {
+    font-size: 120%;
+}
+
+.wp-block-latest-posts__post-author {
+    font-size: 1.7rem;
+    color: var(--dt-sec-color);
+    font-weight: 600;
+}
+
+.wp-block-code code img {
+    margin-left: 10px;
+}
+
+.wp-block-image figcaption {
+    text-align: center;
+}
+
+.wp-block-calendar table caption {
+    color: #fff;
+    background-color: var(--dt-pri-color);
+}
+
+.has-background.wp-block-post-author {
+    padding: 1rem;
+}
+
+.wp-block-image figcaption {
+    text-align: center;
+}
+
+.wp-block-pullquote.has-text-color blockquote {
+    border-left-color: inherit;
+}
+
+.wp-block-woocommerce-customer-account a .wc-block-customer-account__account-icon {
+    height: 2em;
+    width: 2em;
+}
+
+.wp-block-calendar table caption {
+    color: #fff;
+    background-color: var(--dt-pri-color);
+}
+
+.wc-block-components-product-title a, 
+.wc-block-components-product-title a:hover, 
+.wc-block-components-product-title a:focus {
+    text-decoration: none;
+}
+
+.wp-block-quote .wp-block-search {
+    padding-bottom: 5px;
+}
+
+.wp-block-details summary {
+    font-weight: 600;
+    padding: 10px;
+}
+
+.wp-block-latest-posts__list .wp-block-latest-posts__post-author,
+.wp-block-latest-posts__list .wp-block-latest-posts__post-date {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: var(--dt-sec-color);
+}
+
+.wp-block-table figcaption {
+    text-align: center;
+    font-weight: 600;
+}
+
+.wp-block-verse {
+    padding: 10px;
+}
+
+.wc-block-components-product-sale-badge.wc-block-grid__product-onsale,
+.wc-block-grid .wc-block-grid__product-onsale {
+    left: 15px;
+    top: 15px;
+    padding: 0;
+    color: var(--dt-whi-color);
+    right: auto;
+    min-width: 45px;
+    height: 24px;
+    line-height: 24px;
+    display: block;
+    overflow: hidden;
+    min-height: auto;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.2px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    -ms-border-radius: 5px;
+    z-index: 1;
+    background-color: var(--dt-pri-color);
+    border: none;
+}
+
+.wp-block-calendar table caption {
+    font-weight: 500;
+}
+
+.aligncenter, img.aligncenter {
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+    clear: both;
+}
+
+.gallery:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+
+.wp-block-archives-list a {
+    text-decoration: none;
+}
+
+.has-background.wp-block-read-more, 
+.has-background.post-navigation-link-next,
+.has-background.post-navigation-link-previous {
+    padding: 0.25em 1.375em;
+}
+
+.post-navigation-link-next a,
+.post-navigation-link-previous a {
+    text-decoration: none;
+}
+
+.wc-block-components-product-sale-badge {
+    z-index: 0 !important;
+}
+
+.wp-block-woocommerce-single-product .wp-block-post-title a {
+    text-decoration: none;
+}
