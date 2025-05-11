@@ -370,45 +370,45 @@ nav {
     font-weight: 700;
     font-size: 1.4rem;
     letter-spacing: 0.5px;
-    color: #000;
+    color: #9c94ff;
     position: relative;
     animation: shimmer 3s infinite;
-    text-shadow: -1px -1px 0 #fff, 
-                 1px -1px 0 #fff, 
-                 -1px 1px 0 #fff, 
-                 1px 1px 0 #fff;
-    -webkit-text-fill-color: #000;
+    text-shadow: -1px -1px 0 #000, 
+                 1px -1px 0 #000, 
+                 -1px 1px 0 #000, 
+                 1px 1px 0 #000;
+    -webkit-text-fill-color: #9c94ff;
     background: none;
 }
 
 body.dark-mode .logo-text {
-    color: #000;
-    -webkit-text-fill-color: #000;
-    text-shadow: -1px -1px 0 #fff, 
-                 1px -1px 0 #fff, 
-                 -1px 1px 0 #fff, 
-                 1px 1px 0 #fff;
+    color: #9c94ff;
+    -webkit-text-fill-color: #9c94ff;
+    text-shadow: -1px -1px 0 #000, 
+                 1px -1px 0 #000, 
+                 -1px 1px 0 #000, 
+                 1px 1px 0 #000;
 }
 
 .logo-text .highlight {
     position: relative;
     display: inline-block;
     animation: float 3s ease-in-out infinite;
-    color: #000;
-    -webkit-text-fill-color: #000;
-    text-shadow: -1px -1px 0 #fff, 
-                 1px -1px 0 #fff, 
-                 -1px 1px 0 #fff, 
-                 1px 1px 0 #fff;
+    color: #ff0000;
+    -webkit-text-fill-color: #ff0000;
+    text-shadow: -1px -1px 0 #000, 
+                 1px -1px 0 #000, 
+                 -1px 1px 0 #000, 
+                 1px 1px 0 #000;
 }
 
 body.dark-mode .logo-text .highlight {
-    color: #000;
-    -webkit-text-fill-color: #000;
-    text-shadow: -1px -1px 0 #fff, 
-                 1px -1px 0 #fff, 
-                 -1px 1px 0 #fff, 
-                 1px 1px 0 #fff;
+    color: #ff0000;
+    -webkit-text-fill-color: #ff0000;
+    text-shadow: -1px -1px 0 #000, 
+                 1px -1px 0 #000, 
+                 -1px 1px 0 #000, 
+                 1px 1px 0 #000;
 }
 
 @keyframes shimmer {
