@@ -1587,4 +1587,131 @@ body.dark-mode .section-header h2 {
     .terms-content {
         padding: 0 20px;
     }
+}
+
+/* Image Loading Spinner */
+.image-container, .project-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.image-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+body.dark-mode .image-loading {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Fade-in animation for images */
+.fade-in-image {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Lazy loading placeholder */
+.lazy-placeholder {
+    background-color: #f0f0f0;
+    position: relative;
+    overflow: hidden;
+}
+
+body.dark-mode .lazy-placeholder {
+    background-color: #2a2a2a;
+}
+
+.lazy-placeholder::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shimmerEffect 1.5s infinite;
+}
+
+@keyframes shimmerEffect {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Global Loading Indicator */
+.global-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.global-loading.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.global-spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 20px;
+}
+
+.loading-progress {
+    width: 200px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.loading-progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+.loading-text {
+    color: white;
+    font-size: 14px;
+    letter-spacing: 1px;
 } 

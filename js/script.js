@@ -74,8 +74,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize Swiper slider
     const heroSlider = new Swiper('.hero-slider', {
+        slidesPerView: 1,
+        spaceBetween: 0,
         loop: true,
         speed: 1000,
+        effect: 'fade',
+        fadeEffect: {
+            crossFade: true
+        },
         autoplay: {
             delay: 5000,
             disableOnInteraction: false,
@@ -88,10 +94,75 @@ document.addEventListener('DOMContentLoaded', function() {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
-        effect: 'fade',
-        fadeEffect: {
-            crossFade: true
-        },
+        on: {
+            init: function() {
+                // Load the first slide's background image immediately
+                const activeSlide = document.querySelector('.swiper-slide-active');
+                if (activeSlide) {
+                    const bgImage = activeSlide.getAttribute('data-background');
+                    if (bgImage) {
+                        activeSlide.style.backgroundImage = `url('${bgImage}')`;
+                        activeSlide.removeAttribute('data-background');
+                    }
+                }
+                
+                // Add loading indicator to all slides
+                document.querySelectorAll('.swiper-slide').forEach(slide => {
+                    // Create loading spinner
+                    const loadingDiv = document.createElement('div');
+                    loadingDiv.className = 'image-loading';
+                    loadingDiv.innerHTML = '<div class="spinner"></div>';
+                    slide.appendChild(loadingDiv);
+                    
+                    // If slide has a background image that needs to be loaded
+                    if (slide.getAttribute('data-background')) {
+                        // Create an image element to preload the background
+                        const img = new Image();
+                        img.onload = function() {
+                            // When image is loaded, set it as background and remove spinner
+                            slide.style.backgroundImage = `url('${img.src}')`;
+                            const spinner = slide.querySelector('.image-loading');
+                            if (spinner) {
+                                spinner.style.display = 'none';
+                            }
+                        };
+                        img.src = slide.getAttribute('data-background');
+                    } else {
+                        // If slide already has background image set
+                        const spinner = slide.querySelector('.image-loading');
+                        if (spinner) {
+                            spinner.style.display = 'none';
+                        }
+                    }
+                });
+            },
+            slideChangeTransitionStart: function() {
+                // Load the next slide's background image
+                const activeSlide = document.querySelector('.swiper-slide-active');
+                const nextSlide = document.querySelector('.swiper-slide-next');
+                const prevSlide = document.querySelector('.swiper-slide-prev');
+                
+                [activeSlide, nextSlide, prevSlide].forEach(slide => {
+                    if (slide) {
+                        const bgImage = slide.getAttribute('data-background');
+                        if (bgImage) {
+                            slide.style.backgroundImage = `url('${bgImage}')`;
+                            slide.removeAttribute('data-background');
+                            
+                            // Hide spinner when image is loaded
+                            const spinner = slide.querySelector('.image-loading');
+                            if (spinner) {
+                                const img = new Image();
+                                img.onload = function() {
+                                    spinner.style.display = 'none';
+                                };
+                                img.src = bgImage;
+                            }
+                        }
+                    }
+                });
+            }
+        }
     });
     
     // Header scroll effect
@@ -360,4 +431,144 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+    
+    // Image Loading Spinners
+    // Add loading spinners to all images
+    const imagesToLoad = document.querySelectorAll('.image-container img, .project-image img');
+    
+    imagesToLoad.forEach(function(img) {
+        // Create wrapper if not already in a relative positioned container
+        const parent = img.parentElement;
+        
+        // Add lazy loading attribute
+        img.setAttribute('loading', 'lazy');
+        
+        // Add placeholder class to parent
+        parent.classList.add('lazy-placeholder');
+        
+        // Create spinner element
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'image-loading';
+        loadingDiv.innerHTML = '<div class="spinner"></div>';
+        parent.appendChild(loadingDiv);
+        
+        // Hide spinner and show image when loaded
+        img.onload = function() {
+            const spinner = this.parentElement.querySelector('.image-loading');
+            if (spinner) {
+                spinner.style.display = 'none';
+                parent.classList.remove('lazy-placeholder');
+                img.classList.add('fade-in-image');
+            }
+        };
+        
+        // If image is already cached and loaded
+        if (img.complete) {
+            const spinner = img.parentElement.querySelector('.image-loading');
+            if (spinner) {
+                spinner.style.display = 'none';
+                parent.classList.remove('lazy-placeholder');
+                img.classList.add('fade-in-image');
+            }
+        }
+    });
+    
+    // Implement Intersection Observer for better lazy loading
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    const src = img.getAttribute('data-src');
+                    
+                    if (src) {
+                        img.src = src;
+                        img.removeAttribute('data-src');
+                    }
+                    
+                    observer.unobserve(img);
+                }
+            });
+        });
+        
+        // Find all images with data-src attribute
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+    
+    // Global Loading Indicator
+    const globalLoading = document.querySelector('.global-loading');
+    const progressBar = document.querySelector('.loading-progress-bar');
+    const percentageText = document.querySelector('.loading-percentage');
+    
+    let loadedItems = 0;
+    let totalItems = 0;
+    
+    // Count all images, scripts, and stylesheets
+    totalItems = document.querySelectorAll('img').length + 
+                 document.querySelectorAll('script').length + 
+                 document.querySelectorAll('link[rel="stylesheet"]').length;
+    
+    // Function to update progress
+    function updateProgress() {
+        loadedItems++;
+        const percentage = Math.min(Math.round((loadedItems / totalItems) * 100), 100);
+        progressBar.style.width = percentage + '%';
+        percentageText.textContent = percentage + '%';
+        
+        if (loadedItems >= totalItems) {
+            // When everything is loaded
+            setTimeout(function() {
+                globalLoading.classList.add('fade-out');
+                setTimeout(function() {
+                    globalLoading.style.display = 'none';
+                }, 500);
+            }, 500);
+        }
+    }
+    
+    // Track image loading
+    document.querySelectorAll('img').forEach(img => {
+        if (img.complete) {
+            updateProgress();
+        } else {
+            img.addEventListener('load', updateProgress);
+            img.addEventListener('error', updateProgress); // Count errors as loaded
+        }
+    });
+    
+    // Track script loading
+    document.querySelectorAll('script').forEach(script => {
+        if (script.async === false) {
+            script.addEventListener('load', updateProgress);
+            script.addEventListener('error', updateProgress);
+        } else {
+            updateProgress(); // Async scripts don't block, so count as loaded
+        }
+    });
+    
+    // Track stylesheet loading
+    document.querySelectorAll('link[rel="stylesheet"]').forEach(stylesheet => {
+        // Stylesheets don't have reliable load events across browsers
+        // So we'll just increment after a short delay
+        setTimeout(updateProgress, 100);
+    });
+    
+    // Fallback in case some resources don't trigger events
+    setTimeout(function() {
+        if (loadedItems < totalItems) {
+            // Force complete
+            loadedItems = totalItems;
+            progressBar.style.width = '100%';
+            percentageText.textContent = '100%';
+            
+            setTimeout(function() {
+                globalLoading.classList.add('fade-out');
+                setTimeout(function() {
+                    globalLoading.style.display = 'none';
+                }, 500);
+            }, 500);
+        }
+    }, 5000); // 5 second fallback
 }); 

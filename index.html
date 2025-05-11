@@ -77,6 +77,15 @@
     </script>
 			</head>
 <body class="dark-mode">
+    <!-- Global Loading Indicator -->
+    <div class="global-loading">
+        <div class="global-spinner"></div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar"></div>
+        </div>
+        <p class="loading-text">Loading... <span class="loading-percentage">0%</span></p>
+    </div>
+
     <!-- Preloader -->
     <div class="preloader">
         <div class="preloader-container">
@@ -128,7 +137,7 @@
     <section id="home" class="hero">
         <div class="hero-slider swiper">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" style="background-image: url('images/slides/1.jpg');">
+                <div class="swiper-slide" data-background="images/slides/1.jpg">
                     <div class="slide-content">
                         <h1 data-aos="fade-up">Hi, I'm <span class="gradient-text">Aaqib Jeelani</span></h1>
                         <h2 data-aos="fade-up" data-aos-delay="200" class="typed-text"></h2>
@@ -139,7 +148,7 @@
 													</div>
 					</div>
 				</div>
-                <div class="swiper-slide" style="background-image: url('images/slides/2.jpg');">
+                <div class="swiper-slide" data-background="images/slides/2.jpg">
                     <div class="slide-content">
                         <h1 data-aos="fade-up">Full Stack <span class="gradient-text">Developer</span></h1>
                         <p data-aos="fade-up" data-aos-delay="200">Specializing in modern web technologies and responsive design</p>
@@ -148,7 +157,7 @@
 			</div>
 		</div>
 			</div>
-                <div class="swiper-slide" style="background-image: url('images/slides/3.jpg');">
+                <div class="swiper-slide" data-background="images/slides/3.jpg">
                     <div class="slide-content">
                         <h1 data-aos="fade-up">IT Manager at <span class="gradient-text">Atom Inspections</span></h1>
                         <p data-aos="fade-up" data-aos-delay="200">Developing snagging software solutions for Dubai's inspection industry</p>
@@ -186,7 +195,7 @@
             <div class="about-content">
                 <div class="about-image" data-aos="fade-right">
                     <div class="image-container">
-                        <img src="images\myphoto1.png" alt="Aaqib Jeelani" />
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="https://atomss.com/act/assets/team/aaqib.jpg" alt="Aaqib Jeelani" />
                         <div class="experience-badge">
                             <span class="years">5+</span>
                             <span class="text">Years<br>Experience</span>
@@ -415,7 +424,7 @@
                 <div class="project-card" data-category="web" data-aos="fade-up">
                     <div class="project-image">
                         <a href="https://booknest.atomss.com/landing/index.html" target="_blank">
-                            <img src="images/projects/Booknest.jpg" alt="BookNest Project">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/projects/Booknest.jpg" alt="BookNest Project">
                             <div class="project-overlay">
                                 <div class="project-preview">
                                     <i class="fas fa-external-link-alt"></i>
@@ -440,7 +449,7 @@
                 <div class="project-card" data-category="system" data-aos="fade-up" data-aos-delay="100">
                     <div class="project-image">
                         <a href="https://thelegendsschool.com/legends_school/" target="_blank">
-                            <img src="images/projects/Legends_School_Website.jpg" alt="Legends School Project">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/projects/Legends_School_Website.jpg" alt="Legends School Project">
                             <div class="project-overlay">
                                 <div class="project-preview">
                                     <i class="fas fa-external-link-alt"></i>
@@ -465,7 +474,7 @@
                 <div class="project-card" data-category="web" data-aos="fade-up" data-aos-delay="200">
                     <div class="project-image">
                         <a href="https://kashadobe.atomss.com/" target="_blank">
-                            <img src="images/projects/Kashadobe.jpg" alt="Kash Adobe Project">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/projects/Kashadobe.jpg" alt="Kash Adobe Project">
                             <div class="project-overlay">
                                 <div class="project-preview">
                                     <i class="fas fa-external-link-alt"></i>
@@ -490,7 +499,7 @@
                 <div class="project-card" data-category="app" data-aos="fade-up" data-aos-delay="300">
                     <div class="project-image">
                         <a href="https://hr.atomss.com/hr_atom/" target="_blank">
-                            <img src="images/projects/HR_Management.jpg" alt="HR Atom Project">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/projects/HR_Management.jpg" alt="HR Atom Project">
                             <div class="project-overlay">
                                 <div class="project-preview">
                                     <i class="fas fa-external-link-alt"></i>
@@ -515,7 +524,7 @@
                 <div class="project-card" data-category="system" data-aos="fade-up" data-aos-delay="400">
                     <div class="project-image">
                         <a href="https://school.thelegendsschool.com/ajvirus_school/" target="_blank">
-                            <img src="images/projects/School_Management.jpg" alt="School Management Project">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/projects/School_Management.jpg" alt="School Management Project">
                             <div class="project-overlay">
                                 <div class="project-preview">
                                     <i class="fas fa-external-link-alt"></i>
@@ -540,7 +549,7 @@
                 <div class="project-card" data-category="app" data-aos="fade-up" data-aos-delay="500">
                     <div class="project-image">
                         <a href="https://onsite.atomss.com/atom_onsite/" target="_blank">
-                            <img src="images/slides/4.jpg" alt="Atom Onsite Project">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/slides/4.jpg" alt="Atom Onsite Project">
                             <div class="project-overlay">
                                 <div class="project-preview">
                                     <i class="fas fa-external-link-alt"></i>
