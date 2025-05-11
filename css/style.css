@@ -183,6 +183,8 @@ html {
     scroll-behavior: smooth;
     overflow-x: hidden;
     width: 100%;
+    height: 100%;
+    -webkit-overflow-scrolling: touch; /* Improve mobile scrolling */
 }
 
 body {
@@ -193,6 +195,8 @@ body {
     overflow-x: hidden;
     max-width: 100%;
     position: relative;
+    min-height: 100%;
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
 }
 
 body.nav-open {
@@ -1363,6 +1367,7 @@ body.dark-mode .section-header h2 {
         transition: var(--transition);
         z-index: 999;
         gap: 20px;
+        overflow-y: auto; /* Allow scrolling within the menu */
     }
     
     body.dark-mode .nav-links {
@@ -1393,13 +1398,15 @@ body.dark-mode .section-header h2 {
     .projects-grid {
         grid-template-columns: 1fr;
         width: 100%;
-        overflow-x: hidden;
+        overflow-x: visible; /* Changed from hidden to prevent scroll issues */
         gap: 20px;
     }
     
     .project-card {
         width: 100%;
         max-width: 100%;
+        transform: none !important; /* Prevent transform animations that might cause scroll issues */
+        opacity: 1 !important;
     }
     
     .personal-info {
@@ -1446,13 +1453,25 @@ body.dark-mode .section-header h2 {
         align-items: center;
         gap: 10px;
     }
+    
+    /* Optimize animations for mobile */
+    [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    
+    /* Fix for stuck scrolling */
+    section {
+        overflow: visible !important;
+    }
 }
 
 @media (max-width: 576px) {
     section {
         padding: 60px 0;
         width: 100%;
-        overflow: hidden;
+        overflow: visible !important; /* Changed from hidden to prevent scroll issues */
     }
     
     .hero {
@@ -1714,4 +1733,40 @@ body.dark-mode .lazy-placeholder {
     color: white;
     font-size: 14px;
     letter-spacing: 1px;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+    /* Optimize images for mobile */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Reduce animation complexity on mobile */
+    .fade-in-image {
+        animation: none;
+        opacity: 1;
+    }
+    
+    /* Fix for stuck scrolling at bottom of page */
+    body {
+        padding-bottom: 1px; /* Creates a small space at the bottom */
+    }
+    
+    /* Prevent overflow issues */
+    .projects {
+        overflow: visible;
+    }
+    
+    .project-card {
+        overflow: visible;
+    }
+    
+    /* Optimize loading indicators for mobile */
+    .global-loading, .preloader {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+    }
 } 

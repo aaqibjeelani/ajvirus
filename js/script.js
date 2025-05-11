@@ -482,30 +482,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Implement Intersection Observer for better lazy loading
-    if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    const src = img.getAttribute('data-src');
-                    
-                    if (src) {
-                        img.src = src;
-                        img.removeAttribute('data-src');
-                    }
-                    
-                    observer.unobserve(img);
-                }
-            });
-        });
-        
-        // Find all images with data-src attribute
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            imageObserver.observe(img);
-        });
-    }
-    
     // Global Loading Indicator
     const globalLoading = document.querySelector('.global-loading');
     const progressBar = document.querySelector('.loading-progress-bar');
@@ -523,18 +499,24 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateProgress() {
         loadedItems++;
         const percentage = Math.min(Math.round((loadedItems / totalItems) * 100), 100);
-        progressBar.style.width = percentage + '%';
-        percentageText.textContent = percentage + '%';
         
-        if (loadedItems >= totalItems) {
-            // When everything is loaded
-            setTimeout(function() {
-                globalLoading.classList.add('fade-out');
+        // Use requestAnimationFrame for smoother UI updates
+        requestAnimationFrame(() => {
+            progressBar.style.width = percentage + '%';
+            percentageText.textContent = percentage + '%';
+            
+            if (loadedItems >= totalItems) {
+                // When everything is loaded
                 setTimeout(function() {
-                    globalLoading.style.display = 'none';
+                    globalLoading.classList.add('fade-out');
+                    setTimeout(function() {
+                        if (globalLoading.parentNode) {
+                            globalLoading.style.display = 'none';
+                        }
+                    }, 500);
                 }, 500);
-            }, 500);
-        }
+            }
+        });
     }
     
     // Track image loading
@@ -549,12 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Track script loading
     document.querySelectorAll('script').forEach(script => {
-        if (script.async === false) {
-            script.addEventListener('load', updateProgress);
-            script.addEventListener('error', updateProgress);
-        } else {
-            updateProgress(); // Async scripts don't block, so count as loaded
-        }
+        updateProgress(); // Count all scripts as loaded immediately to avoid blocking
     });
     
     // Track stylesheet loading
@@ -564,20 +541,100 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(updateProgress, 100);
     });
     
-    // Fallback in case some resources don't trigger events
+    // Fallback in case some resources don't trigger events - shorter timeout
     setTimeout(function() {
         if (loadedItems < totalItems) {
             // Force complete
             loadedItems = totalItems;
-            progressBar.style.width = '100%';
-            percentageText.textContent = '100%';
-            
-            setTimeout(function() {
-                globalLoading.classList.add('fade-out');
+            requestAnimationFrame(() => {
+                progressBar.style.width = '100%';
+                percentageText.textContent = '100%';
+                
                 setTimeout(function() {
-                    globalLoading.style.display = 'none';
+                    globalLoading.classList.add('fade-out');
+                    setTimeout(function() {
+                        if (globalLoading.parentNode) {
+                            globalLoading.style.display = 'none';
+                        }
+                    }, 500);
                 }, 500);
-            }, 500);
+            });
         }
-    }, 5000); // 5 second fallback
+    }, 3000); // 3 second fallback (reduced from 5 seconds)
+    
+    // Optimize image loading for mobile
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    const src = img.getAttribute('data-src');
+                    
+                    if (src) {
+                        // Create a new image to preload
+                        const tempImg = new Image();
+                        tempImg.onload = function() {
+                            // Only set the src when loaded
+                            img.src = src;
+                            img.removeAttribute('data-src');
+                            
+                            // Find parent container and spinner
+                            const parent = img.parentElement;
+                            if (parent) {
+                                const spinner = parent.querySelector('.image-loading');
+                                if (spinner) {
+                                    spinner.style.display = 'none';
+                                }
+                                parent.classList.remove('lazy-placeholder');
+                                img.classList.add('fade-in-image');
+                            }
+                        };
+                        tempImg.src = src;
+                    }
+                    
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '200px', // Load images 200px before they come into view
+            threshold: 0.1
+        });
+        
+        // Find all images with data-src attribute
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+    
+    // Fix for mobile scroll issues
+    let touchStartY = 0;
+    let touchEndY = 0;
+    let isScrolling = false;
+    
+    // Only apply these fixes on mobile devices
+    if (window.innerWidth <= 768) {
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', function(e) {
+            if (isScrolling) return;
+            
+            touchEndY = e.touches[0].clientY;
+            const diff = touchStartY - touchEndY;
+            
+            // If scrolling down and near bottom of page
+            if (diff > 0 && window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+                isScrolling = true;
+                // Force browser to recognize there's more content
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 300);
+            }
+        }, { passive: true });
+        
+        document.addEventListener('touchend', function() {
+            isScrolling = false;
+        }, { passive: true });
+    }
 }); 
