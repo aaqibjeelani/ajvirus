@@ -1188,6 +1188,25 @@ footer .social-links a:hover {
     background-color: var(--primary-color);
 }
 
+/* Footer Links */
+.footer-links {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: #999;
+    font-size: 14px;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+}
+
 /* Dark Mode Styles */
 body.dark-mode {
     background-color: #121212;
@@ -1394,6 +1413,12 @@ body.dark-mode .section-header h2 {
         margin-bottom: 10px;
         padding: 8px 15px;
     }
+    
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -1481,4 +1506,58 @@ body.dark-mode .section-header h2 {
 .projects {
     width: 100%;
     overflow: hidden;
+}
+
+/* Privacy Policy and Terms of Use Pages */
+.privacy-policy,
+.terms-of-use {
+    padding: 120px 0 80px;
+    min-height: 70vh;
+}
+
+.privacy-policy .section-header,
+.terms-of-use .section-header {
+    margin-bottom: 40px;
+}
+
+.policy-content,
+.terms-content {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.policy-content h2,
+.terms-content h2 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.policy-content p,
+.terms-content p {
+    margin-bottom: 15px;
+}
+
+.policy-content ul,
+.terms-content ul {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.policy-content li,
+.terms-content li {
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .privacy-policy,
+    .terms-of-use {
+        padding: 100px 0 60px;
+    }
+    
+    .policy-content,
+    .terms-content {
+        padding: 0 20px;
+    }
 } 

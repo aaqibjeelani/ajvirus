@@ -2,9 +2,13 @@
 
 A modern, responsive portfolio website showcasing my skills, projects, and experience as a Full Stack Developer.
 
+## Live Preview
+
+Visit my portfolio website: [https://aaqibjeelani.github.io/ajvirus/](https://aaqibjeelani.github.io/ajvirus/)
+
 ## About Me
 
-I'm Aaqib Jeelani, a Full Stack Developer with experience working remotely for clients in Dubai and India. I specialize in building responsive websites and web applications using modern technologies.
+I'm Aaqib Jeelani, a Full Stack Developer and IT Manager at Atom Inspections in Dubai, UAE. I specialize in building responsive websites and web applications using modern technologies.
 
 ## Projects Featured
 
@@ -15,22 +19,36 @@ I'm Aaqib Jeelani, a Full Stack Developer with experience working remotely for c
 - [School Management](https://school.thelegendsschool.com/ajvirus_school/) - Comprehensive school platform
 - [Atom Onsite](https://onsite.atomss.com/atom_onsite/) - Site management solution
 
+## Features
+
+- Responsive design that works on all devices
+- Modern UI with animations and interactive elements
+- Dark/Light mode toggle
+- Project filtering by category
+- Contact form
+- Skill progress visualization
+- Experience timeline
+- SEO optimized with structured data
+- Optimized for search engines
+
 ## Technologies Used
 
 - HTML5
 - CSS3 (with CSS variables for easy customization)
 - JavaScript (vanilla JS, no frameworks)
-- PHP
-- MySQL
+- Swiper.js for sliders
+- AOS for scroll animations
+- Typed.js for typing effect
 - Font Awesome icons
 - Google Fonts
 
 ## Connect With Me
 
-- GitHub: [ajvirus](https://github.com/aaqibjeelani)
+- GitHub: [aaqibjeelani](https://github.com/aaqibjeelani)
 - LinkedIn: [Aaqib Jeelani](https://www.linkedin.com/in/aaqibjeelani/)
 - Twitter: [@developeraaqib](https://x.com/developeraaqib)
+- Email: ajvirusofficial@gmail.com
 
 ## License
 
-MIT License - Feel free to use and modify this template for your own portfolio.
+MIT License - See the [license.txt](license.txt) file for details.

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | Aaqib Jeelani</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://aaqibjeelani.github.io/ajvirus/404.html">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/mylogo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/mylogo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/mylogo.png">
+    <link rel="manifest" href="site.webmanifest">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .error-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        .error-page img {
+            max-width: 150px;
+            margin-bottom: 30px;
+        }
+        
+        .error-page h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), #9c94ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .error-page p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+        
+        .error-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .error-page h1 {
+                font-size: 2.5rem;
+            }
+            
+            .error-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="error-page">
+        <img src="images/mylogo.png" alt="Aaqib Jeelani Logo">
+        <h1>404 - Page Not Found</h1>
+        <p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+        <div class="error-buttons">
+            <a href="index.html" class="btn primary-btn">Go to Homepage</a>
+            <a href="index.html#contact" class="btn secondary-btn">Contact Me</a>
+        </div>
+    </div>
+    
+    <script>
+        // Check if dark mode is enabled in localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (!isDarkMode) {
+                document.body.classList.remove('dark-mode');
+            }
+        });
+    </script>
+</body>
+</html> 
