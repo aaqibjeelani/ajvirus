@@ -370,18 +370,45 @@ nav {
     font-weight: 700;
     font-size: 1.4rem;
     letter-spacing: 0.5px;
-    background: linear-gradient(45deg, var(--primary-color), #9c94ff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #000;
     position: relative;
     animation: shimmer 3s infinite;
+    text-shadow: -1px -1px 0 #fff, 
+                 1px -1px 0 #fff, 
+                 -1px 1px 0 #fff, 
+                 1px 1px 0 #fff;
+    -webkit-text-fill-color: #000;
+    background: none;
+}
+
+body.dark-mode .logo-text {
+    color: #000;
+    -webkit-text-fill-color: #000;
+    text-shadow: -1px -1px 0 #fff, 
+                 1px -1px 0 #fff, 
+                 -1px 1px 0 #fff, 
+                 1px 1px 0 #fff;
 }
 
 .logo-text .highlight {
     position: relative;
     display: inline-block;
     animation: float 3s ease-in-out infinite;
+    color: #000;
+    -webkit-text-fill-color: #000;
+    text-shadow: -1px -1px 0 #fff, 
+                 1px -1px 0 #fff, 
+                 -1px 1px 0 #fff, 
+                 1px 1px 0 #fff;
+}
+
+body.dark-mode .logo-text .highlight {
+    color: #000;
+    -webkit-text-fill-color: #000;
+    text-shadow: -1px -1px 0 #fff, 
+                 1px -1px 0 #fff, 
+                 -1px 1px 0 #fff, 
+                 1px 1px 0 #fff;
 }
 
 @keyframes shimmer {
