@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Remove preloader from DOM after animation completes
             setTimeout(function() {
-                preloader.style.display = 'none';
+                if (preloader.parentNode) {
+                    preloader.parentNode.removeChild(preloader);
+                }
             }, 500);
         }, 1500); // Show preloader for at least 1.5 seconds
     });

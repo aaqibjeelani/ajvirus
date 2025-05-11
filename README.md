@@ -27,7 +27,7 @@ I'm Aaqib Jeelani, a Full Stack Developer with experience working remotely for c
 
 ## Connect With Me
 
-- GitHub: [ajvirus](https://github.com/ajvirus)
+- GitHub: [ajvirus](https://github.com/aaqibjeelani)
 - LinkedIn: [Aaqib Jeelani](https://www.linkedin.com/in/aaqibjeelani/)
 - Twitter: [@developeraaqib](https://x.com/developeraaqib)
 
