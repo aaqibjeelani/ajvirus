@@ -188,6 +188,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Add click event for back to top button
+    backToTopBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
     // Mobile navigation toggle
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
