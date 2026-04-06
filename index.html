@@ -19,20 +19,20 @@
     <meta property="og:url" content="https://aaqibjeelani.github.io/ajvirus">
     <meta property="og:title" content="Aaqib Jeelani | Full Stack Developer & IT Manager">
     <meta property="og:description" content="Portfolio of Aaqib Jeelani, a Full Stack Developer and IT Manager at Atom Inspections in Dubai, specializing in web development and digital solutions.">
-    <meta property="og:image" content="https://aaqibjeelani.github.io/ajvirus/images/mylogo.png">
+    <meta property="og:image" content="https://aaqibjeelani.github.io/ajvirus/images/transparentlogo aj.png">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://aaqibjeelani.github.io/ajvirus">
     <meta property="twitter:title" content="Aaqib Jeelani | Full Stack Developer & IT Manager">
     <meta property="twitter:description" content="Portfolio of Aaqib Jeelani, a Full Stack Developer and IT Manager at Atom Inspections in Dubai, specializing in web development and digital solutions.">
-    <meta property="twitter:image" content="https://aaqibjeelani.github.io/ajvirus/images/mylogo.png">
+    <meta property="twitter:image" content="https://aaqibjeelani.github.io/ajvirus/images/transparentlogo aj.png">
     <meta name="twitter:creator" content="@developeraaqib">
     
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="images/mylogo.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/mylogo.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/mylogo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/transparentlogo aj.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/transparentlogo aj.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/transparentlogo aj.png">
     <link rel="manifest" href="site.webmanifest">
     
     <!-- Stylesheets -->
@@ -52,7 +52,7 @@
       "@type": "Person",
       "name": "Aaqib Jeelani",
       "url": "https://aaqibjeelani.github.io/ajvirus",
-      "image": "images\mylogo.png",
+      "image": "images\transparentlogo aj.png",
       "sameAs": [
         "https://github.com/aaqibjeelani",
         "https://www.linkedin.com/in/aaqibjeelani/",
@@ -88,15 +88,34 @@
 
     <!-- Preloader -->
     <div class="preloader">
+        <div class="stars-container"></div>
+        <div class="shooting-stars"></div>
         <div class="preloader-container">
-            <div class="orbit-container">
-                <div class="orbit"></div>
-                <div class="moon"></div>
+            <!-- Outer orbit ring -->
+            <div class="orbit-ring orbit-ring-1">
+                <div class="orbit-moon moon-1"></div>
             </div>
-            <div class="planet">
-                <img src="images/mylogo.png" alt="AJ Virus Logo">
+            
+            <!-- Middle orbit ring -->
+            <div class="orbit-ring orbit-ring-2">
+                <div class="orbit-moon moon-2"></div>
             </div>
-            <p class="loading-text">Loading...</p>
+            
+            <!-- Inner orbit ring -->
+            <div class="orbit-ring orbit-ring-3">
+                <div class="orbit-moon moon-3"></div>
+            </div>
+            
+            <!-- Planet (Logo) -->
+            <div class="planet-container">
+                <div class="planet-glow"></div>
+                <div class="planet-atmosphere"></div>
+                <img src="images/transparentlogo aj.png" alt="AJ Virus Logo" class="planet-logo">
+                <div class="planet-shadow"></div>
+            </div>
+            
+            <p class="loading-text">Initializing Universe...</p>
+            <div class="cosmic-dust"></div>
         </div>
     </div>
 
@@ -108,7 +127,7 @@
             <nav>
                 <div class="logo">
                     <a href="#home">
-                        <img src="images/mylogo.png" alt="Aaqib Jeelani Logo">
+                        <img src="images/transparentlogo aj.png" alt="Aaqib Jeelani Logo">
                         <span class="logo-text">Aaqib <span class="highlight">Jeelani</span></span>
                     </a>
                 </div>
@@ -195,9 +214,9 @@
             <div class="about-content">
                 <div class="about-image" data-aos="fade-right">
                     <div class="image-container">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/mylogo.png" alt="Aaqib Jeelani" />
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" data-src="images/transparentlogo aj.png" alt="Aaqib Jeelani" />
                         <div class="experience-badge">
-                            <span class="years">5+</span>
+                            <span class="years">6+</span>
                             <span class="text">Years<br>Experience</span>
 											</div>
 																			</div>
@@ -419,6 +438,8 @@
                 <button class="filter-btn" data-filter="web">Web Development</button>
                 <button class="filter-btn" data-filter="app">Applications</button>
                 <button class="filter-btn" data-filter="system">Systems</button>
+                <button class="filter-btn" data-filter="mobile">Mobile Apps</button>
+                <button class="filter-btn" data-filter="ai">AI Solutions</button>
 			</div>
             <div class="projects-grid">
                 <div class="project-card" data-category="web" data-aos="fade-up">
@@ -571,6 +592,285 @@
 									</div>
 			</div>
 		</div>
+                <!-- New Projects Start -->
+                <div class="project-card" data-category="system" data-aos="fade-up" data-aos-delay="600">
+                    <div class="project-image">
+                        <a href="https://atomss.com/cms" target="_blank">
+                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' style='width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)'>
+                                <defs>
+                                    <linearGradient id='cmsGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                        <stop offset='0%' style='stop-color:#667eea;stop-opacity:1' />
+                                        <stop offset='100%' style='stop-color:#764ba2;stop-opacity:1' />
+                                    </linearGradient>
+                                </defs>
+                                <rect width='800' height='600' fill='url(#cmsGrad)'/>
+                                <circle cx='400' cy='250' r='120' fill='rgba(255,255,255,0.2)'/>
+                                <path d='M 340 250 L 380 290 L 460 210' stroke='white' stroke-width='15' fill='none' stroke-linecap='round' stroke-linejoin='round'/>
+                                <text x='400' y='450' font-family='Arial' font-size='48' fill='white' text-anchor='middle' font-weight='bold'>Customer Management</text>
+                                <text x='400' y='510' font-family='Arial' font-size='32' fill='rgba(255,255,255,0.9)' text-anchor='middle'>CRM System</text>
+                            </svg>
+                            <div class="project-overlay">
+                                <div class="project-preview">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="project-content">
+                        <h3>Customer Management System</h3>
+                        <p>A comprehensive CRM solution for managing customer relationships, tracking interactions, and streamlining business processes.</p>
+                        <div class="project-tech">
+                            <span>PHP</span>
+                            <span>MySQL</span>
+                            <span>JavaScript</span>
+                            <span>Bootstrap</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://atomss.com/cms" target="_blank" class="btn small-btn">View Live</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card" data-category="mobile" data-aos="fade-up" data-aos-delay="700">
+                    <div class="project-image">
+                        <a href="#" target="_blank">
+                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' style='width:100%;height:100%'>
+                                <defs>
+                                    <linearGradient id='teacherGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                        <stop offset='0%' style='stop-color:#f093fb;stop-opacity:1' />
+                                        <stop offset='100%' style='stop-color:#f5576c;stop-opacity:1' />
+                                    </linearGradient>
+                                </defs>
+                                <rect width='800' height='600' fill='url(#teacherGrad)'/>
+                                <rect x='320' y='150' width='160' height='280' rx='20' fill='rgba(255,255,255,0.3)' stroke='white' stroke-width='4'/>
+                                <circle cx='400' cy='230' r='40' fill='white'/>
+                                <rect x='350' y='290' width='100' height='8' rx='4' fill='white'/>
+                                <rect x='360' y='310' width='80' height='8' rx='4' fill='white'/>
+                                <rect x='370' y='330' width='60' height='8' rx='4' fill='white'/>
+                                <text x='400' y='500' font-family='Arial' font-size='42' fill='white' text-anchor='middle' font-weight='bold'>Teacher Portal</text>
+                                <text x='400' y='550' font-family='Arial' font-size='28' fill='rgba(255,255,255,0.9)' text-anchor='middle'>Android App</text>
+                            </svg>
+                            <div class="project-overlay">
+                                <div class="project-preview">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="project-content">
+                        <h3>Teacher Portal Android App</h3>
+                        <p>A mobile application for teachers to manage classes, track student progress, and communicate with parents efficiently.</p>
+                        <div class="project-tech">
+                            <span>Android</span>
+                            <span>Java</span>
+                            <span>Firebase</span>
+                            <span>REST API</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="btn small-btn">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card" data-category="mobile" data-aos="fade-up" data-aos-delay="800">
+                    <div class="project-image">
+                        <a href="#" target="_blank">
+                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' style='width:100%;height:100%'>
+                                <defs>
+                                    <linearGradient id='assetGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                        <stop offset='0%' style='stop-color:#4facfe;stop-opacity:1' />
+                                        <stop offset='100%' style='stop-color:#00f2fe;stop-opacity:1' />
+                                    </linearGradient>
+                                </defs>
+                                <rect width='800' height='600' fill='url(#assetGrad)'/>
+                                <rect x='250' y='180' width='300' height='200' rx='15' fill='rgba(255,255,255,0.25)' stroke='white' stroke-width='3'/>
+                                <rect x='280' y='210' width='100' height='60' rx='8' fill='white' opacity='0.9'/>
+                                <rect x='420' y='210' width='100' height='60' rx='8' fill='white' opacity='0.9'/>
+                                <rect x='280' y='290' width='100' height='60' rx='8' fill='white' opacity='0.9'/>
+                                <rect x='420' y='290' width='100' height='60' rx='8' fill='white' opacity='0.9'/>
+                                <text x='400' y='470' font-family='Arial' font-size='40' fill='white' text-anchor='middle' font-weight='bold'>Asset Management</text>
+                                <text x='400' y='520' font-family='Arial' font-size='28' fill='rgba(255,255,255,0.9)' text-anchor='middle'>Dubai • Android</text>
+                            </svg>
+                            <div class="project-overlay">
+                                <div class="project-preview">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="project-content">
+                        <h3>Atcrum Asset Management</h3>
+                        <p>An Android app for asset management system in Dubai, enabling efficient tracking and management of company assets.</p>
+                        <div class="project-tech">
+                            <span>Android</span>
+                            <span>Kotlin</span>
+                            <span>SQLite</span>
+                            <span>Cloud Sync</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="btn small-btn">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card" data-category="mobile" data-aos="fade-up" data-aos-delay="900">
+                    <div class="project-image">
+                        <a href="#" target="_blank">
+                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' style='width:100%;height:100%'>
+                                <defs>
+                                    <linearGradient id='snagGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                        <stop offset='0%' style='stop-color:#fa709a;stop-opacity:1' />
+                                        <stop offset='100%' style='stop-color:#fee140;stop-opacity:1' />
+                                    </linearGradient>
+                                </defs>
+                                <rect width='800' height='600' fill='url(#snagGrad)'/>
+                                <circle cx='400' cy='250' r='100' fill='rgba(255,255,255,0.2)' stroke='white' stroke-width='4'/>
+                                <path d='M 360 250 L 390 280 L 440 220' stroke='white' stroke-width='12' fill='none' stroke-linecap='round' stroke-linejoin='round'/>
+                                <rect x='300' y='380' width='200' height='12' rx='6' fill='white' opacity='0.8'/>
+                                <text x='400' y='480' font-family='Arial' font-size='42' fill='white' text-anchor='middle' font-weight='bold'>Offline Snagging</text>
+                                <text x='400' y='530' font-family='Arial' font-size='26' fill='rgba(255,255,255,0.9)' text-anchor='middle'>No Internet Required</text>
+                            </svg>
+                            <div class="project-overlay">
+                                <div class="project-preview">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="project-content">
+                        <h3>Offline Snagging App</h3>
+                        <p>An Android application for offline property inspection and snagging, perfect for sites without internet connectivity.</p>
+                        <div class="project-tech">
+                            <span>Android</span>
+                            <span>Java</span>
+                            <span>Offline Storage</span>
+                            <span>Sync Technology</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="btn small-btn">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card" data-category="system" data-aos="fade-up" data-aos-delay="1000">
+                    <div class="project-image">
+                        <a href="#" target="_blank">
+                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' style='width:100%;height:100%'>
+                                <defs>
+                                    <linearGradient id='lmsGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                        <stop offset='0%' style='stop-color:#30cfd0;stop-opacity:1' />
+                                        <stop offset='100%' style='stop-color:#330867;stop-opacity:1' />
+                                    </linearGradient>
+                                </defs>
+                                <rect width='800' height='600' fill='url(#lmsGrad)'/>
+                                <rect x='200' y='150' width='400' height='250' rx='20' fill='rgba(255,255,255,0.2)' stroke='white' stroke-width='3'/>
+                                <circle cx='300' cy='230' r='35' fill='white' opacity='0.9'/>
+                                <circle cx='400' cy='230' r='35' fill='white' opacity='0.9'/>
+                                <circle cx='500' cy='230' r='35' fill='white' opacity='0.9'/>
+                                <rect x='250' y='300' width='300' height='10' rx='5' fill='white' opacity='0.7'/>
+                                <rect x='270' y='325' width='260' height='10' rx='5' fill='white' opacity='0.7'/>
+                                <text x='400' y='480' font-family='Arial' font-size='44' fill='white' text-anchor='middle' font-weight='bold'>Learning Management</text>
+                                <text x='400' y='530' font-family='Arial' font-size='28' fill='rgba(255,255,255,0.9)' text-anchor='middle'>Online Education Platform</text>
+                            </svg>
+                            <div class="project-overlay">
+                                <div class="project-preview">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="project-content">
+                        <h3>Learning Management System</h3>
+                        <p>A comprehensive LMS platform for online education, course management, and student engagement tracking.</p>
+                        <div class="project-tech">
+                            <span>PHP</span>
+                            <span>MySQL</span>
+                            <span>JavaScript</span>
+                            <span>Video Streaming</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="btn small-btn">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card" data-category="ai" data-aos="fade-up" data-aos-delay="1100">
+                    <div class="project-image">
+                        <a href="#" target="_blank">
+                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' style='width:100%;height:100%'>
+                                <defs>
+                                    <linearGradient id='aiGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                        <stop offset='0%' style='stop-color:#a18cd1;stop-opacity:1' />
+                                        <stop offset='100%' style='stop-color:#fbc2eb;stop-opacity:1' />
+                                    </linearGradient>
+                                </defs>
+                                <rect width='800' height='600' fill='url(#aiGrad)'/>
+                                <circle cx='400' cy='240' r='90' fill='rgba(255,255,255,0.25)' stroke='white' stroke-width='4'/>
+                                <circle cx='370' cy='220' r='15' fill='white'/>
+                                <circle cx='430' cy='220' r='15' fill='white'/>
+                                <path d='M 370 260 Q 400 290 430 260' stroke='white' stroke-width='6' fill='none' stroke-linecap='round'/>
+                                <path d='M 350 180 L 370 160 M 450 180 L 430 160 M 400 150 L 400 130' stroke='white' stroke-width='5' stroke-linecap='round'/>
+                                <text x='400' y='420' font-family='Arial' font-size='38' fill='white' text-anchor='middle' font-weight='bold'>Pluto AI Assistant</text>
+                                <text x='400' y='470' font-family='Arial' font-size='26' fill='rgba(255,255,255,0.9)' text-anchor='middle'>Offline LLM • Voice Command</text>
+                                <text x='400' y='510' font-family='Arial' font-size='22' fill='rgba(255,255,255,0.8)' text-anchor='middle'>🎤 Voice Recognition Enabled</text>
+                            </svg>
+                            <div class="project-overlay">
+                                <div class="project-preview">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="project-content">
+                        <h3>Pluto Offline AI LLM Voice Assistant</h3>
+                        <p>An innovative offline AI voice command assistant using large language models for intelligent task automation.</p>
+                        <div class="project-tech">
+                            <span>Python</span>
+                            <span>LLM</span>
+                            <span>Voice Recognition</span>
+                            <span>AI/ML</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="btn small-btn">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card" data-category="web" data-aos="fade-up" data-aos-delay="1200">
+                    <div class="project-image">
+                        <a href="#" target="_blank">
+                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' style='width:100%;height:100%'>
+                                <defs>
+                                    <linearGradient id='jkGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                        <stop offset='0%' style='stop-color:#ff9a56;stop-opacity:1' />
+                                        <stop offset='100%' style='stop-color:#ff6a88;stop-opacity:1' />
+                                    </linearGradient>
+                                </defs>
+                                <rect width='800' height='600' fill='url(#jkGrad)'/>
+                                <rect x='200' y='160' width='400' height='260' rx='15' fill='rgba(255,255,255,0.25)' stroke='white' stroke-width='3'/>
+                                <rect x='230' y='190' width='340' height='40' rx='8' fill='white' opacity='0.8'/>
+                                <rect x='230' y='250' width='160' height='140' rx='8' fill='white' opacity='0.7'/>
+                                <rect x='410' y='250' width='160' height='65' rx='8' fill='white' opacity='0.7'/>
+                                <rect x='410' y='325' width='160' height='65' rx='8' fill='white' opacity='0.7'/>
+                                <text x='400' y='490' font-family='Arial' font-size='36' fill='white' text-anchor='middle' font-weight='bold'>Local Business Website</text>
+                                <text x='400' y='535' font-family='Arial' font-size='26' fill='rgba(255,255,255,0.9)' text-anchor='middle'>📍 Jammu & Kashmir</text>
+                            </svg>
+                            <div class="project-overlay">
+                                <div class="project-preview">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="project-content">
+                        <h3>Local Business Website - Jammu & Kashmir</h3>
+                        <p>A modern, responsive website for a local business in Jammu and Kashmir, showcasing products and services.</p>
+                        <div class="project-tech">
+                            <span>HTML5</span>
+                            <span>CSS3</span>
+                            <span>JavaScript</span>
+                            <span>SEO Optimized</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="btn small-btn">View Live</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- New Projects End -->
 	</div>
             <div class="view-more" data-aos="fade-up">
                 <a href="https://github.com/aaqibjeelani" target="_blank" class="btn primary-btn">View More on GitHub</a>
@@ -636,7 +936,21 @@
                             <label for="message">Message</label>
                             <textarea id="message" name="message" rows="5" required></textarea>
 					</div>
-                        <button type="submit" class="btn primary-btn" disabled>Send Message</button>
+                        <!-- CAPTCHA Verification -->
+                        <div class="form-group captcha-group">
+                            <label for="captcha">Security Verification</label>
+                            <div class="captcha-container">
+                                <div class="captcha-code" id="captchaCode"></div>
+                                <button type="button" class="refresh-captcha" id="refreshCaptcha" title="Refresh CAPTCHA">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                            <input type="text" id="captcha" name="captcha" placeholder="Enter the numbers shown above" required autocomplete="off">
+                            <small class="captcha-hint">Please enter the numbers to verify you're human</small>
+                        </div>
+                        <button type="submit" class="btn primary-btn whatsapp-btn" id="submitBtn">
+                            <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                        </button>
                     </form>
 															</div>
 						</div>
@@ -648,7 +962,7 @@
             <div class="footer-content">
                 <div class="logo">
                     <a href="#home">
-                        <img src="images/mylogo.png" alt="Aaqib Jeelani Logo" class="footer-logo">
+                        <img src="images/transparentlogo aj.png" alt="Aaqib Jeelani Logo" class="footer-logo">
                     </a>
                 </div>
                 <p>&copy; 2025 Aaqib Jeelani. All Rights Reserved.</p>
@@ -727,6 +1041,83 @@
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web",
             "url": "https://school.thelegendsschool.com/ajvirus_school/"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Customer Management System",
+            "description": "A comprehensive CRM solution for managing customer relationships, tracking interactions, and streamlining business processes.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "url": "https://atomss.com/cms"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "item": {
+            "@type": "MobileApplication",
+            "name": "Teacher Portal Android App",
+            "description": "A mobile application for teachers to manage classes, track student progress, and communicate with parents efficiently.",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Android"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "item": {
+            "@type": "MobileApplication",
+            "name": "Atcrum Asset Management",
+            "description": "An Android app for asset management system in Dubai, enabling efficient tracking and management of company assets.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Android"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "item": {
+            "@type": "MobileApplication",
+            "name": "Offline Snagging App",
+            "description": "An Android application for offline property inspection and snagging, perfect for sites without internet connectivity.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Android"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Learning Management System",
+            "description": "A comprehensive LMS platform for online education, course management, and student engagement tracking.",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Web"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 10,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": "Pluto Offline AI LLM Voice Assistant",
+            "description": "An innovative offline AI voice command assistant using large language models for intelligent task automation.",
+            "applicationCategory": "AIApplication",
+            "operatingSystem": "Cross-platform"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 11,
+          "item": {
+            "@type": "WebSite",
+            "name": "Local Business Website - Jammu & Kashmir",
+            "description": "A modern, responsive website for a local business in Jammu and Kashmir, showcasing products and services.",
+            "url": "#"
           }
         }
       ]

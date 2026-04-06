@@ -353,37 +353,126 @@ document.addEventListener('DOMContentLoaded', function() {
         skillsObserver.observe(skillsSection);
     }
     
-    // Form submission handling
+    // Form submission handling with WhatsApp Integration and CAPTCHA
     const contactForm = document.getElementById('contactForm');
+    const captchaCodeElement = document.getElementById('captchaCode');
+    const refreshCaptchaBtn = document.getElementById('refreshCaptcha');
+    const captchaInput = document.getElementById('captcha');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    let currentCaptcha = '';
+    
+    // Generate random CAPTCHA code
+    function generateCaptcha() {
+        const length = 5;
+        let captcha = '';
+        const numbers = '0123456789';
+        
+        for (let i = 0; i < length; i++) {
+            captcha += numbers.charAt(Math.floor(Math.random() * numbers.length));
+        }
+        
+        currentCaptcha = captcha;
+        captchaCodeElement.textContent = captcha;
+        
+        // Clear input when CAPTCHA is refreshed
+        if (captchaInput) {
+            captchaInput.value = '';
+        }
+        
+        // Remove error state if exists
+        const existingError = document.querySelector('.captcha-error');
+        if (existingError) {
+            existingError.remove();
+        }
+        
+        submitBtn.classList.remove('error');
+    }
+    
+    // Initialize CAPTCHA on page load
+    if (captchaCodeElement) {
+        generateCaptcha();
+    }
+    
+    // Refresh CAPTCHA button
+    if (refreshCaptchaBtn) {
+        refreshCaptchaBtn.addEventListener('click', function() {
+            // Add rotation animation
+            this.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 300);
+            
+            generateCaptcha();
+        });
+    }
     
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Get form values
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const userCaptcha = captchaInput.value.trim();
             
-            // In a real application, you would send this data to a server
-            // For GitHub Pages (static hosting), you could use a service like Formspree
+            // Validate CAPTCHA
+            if (userCaptcha !== currentCaptcha) {
+                // Show error
+                submitBtn.classList.add('error');
+                
+                // Remove existing error message
+                const existingError = document.querySelector('.captcha-error');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                // Add error message
+                const errorMsg = document.createElement('small');
+                errorMsg.className = 'captcha-error show';
+                errorMsg.textContent = '❌ Incorrect CAPTCHA. Please try again.';
+                captchaInput.parentElement.appendChild(errorMsg);
+                
+                // Shake animation
+                setTimeout(() => {
+                    submitBtn.classList.remove('error');
+                }, 500);
+                
+                // Regenerate CAPTCHA
+                setTimeout(() => {
+                    generateCaptcha();
+                }, 1000);
+                
+                return;
+            }
             
-            // For now, we'll just log the data and show a success message
-            console.log({
-                name,
-                email,
-                subject,
-                message
-            });
+            // Format WhatsApp message
+            const whatsappMessage = `*New Contact Message*%0A%0A` +
+                                   `*Name:* ${encodeURIComponent(name)}%0A` +
+                                   `*Email:* ${encodeURIComponent(email)}%0A` +
+                                   `*Subject:* ${encodeURIComponent(subject)}%0A%0A` +
+                                   `*Message:*%0A${encodeURIComponent(message)}%0A%0A` +
+                                   `---%0A_Sent from Portfolio Website_`;
             
-            // Reset form
+            // Your WhatsApp number (with country code, no + or spaces)
+            const whatsappNumber = '917780852021';
+            
+            // Create WhatsApp URL
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+            
+            // Open WhatsApp
+            window.open(whatsappURL, '_blank');
+            
+            // Reset form and CAPTCHA
             contactForm.reset();
+            generateCaptcha();
             
             // Show success message
             const successMessage = document.createElement('div');
             successMessage.className = 'form-success-message';
-            successMessage.textContent = 'Your message has been sent successfully!';
+            successMessage.innerHTML = '✅ Opening WhatsApp... Your message is ready to send!';
             
             contactForm.appendChild(successMessage);
             
