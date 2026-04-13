@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube</title>
+    <link rel="icon" href="assets/icons/youtube/youtube.png">
+    <style>
+        :root {
+            --bg: #0f0f0f;
+            --card: #181818;
+            --elev: #222;
+            --text: #f1f1f1;
+            --muted: #aaa;
+            --chip: #272727;
+            --red: #ff0033;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: Roboto, Arial, sans-serif; }
+        .app { display: grid; grid-template-rows: 56px 48px 1fr; height: 100vh; }
+        /* Header */
+        .header { display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid #222; background: #0f0f0f; }
+        .left { display: flex; align-items: center; gap: 12px; width: 200px; }
+        .hamburger { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+        .hamburger:hover { background: #1f1f1f; }
+        .logo { display: flex; align-items: center; gap: 6px; font-weight: 700; letter-spacing: -0.3px; }
+        .logo img { width: 26px; height: 26px; }
+        .logo span { font-size: 18px; }
+        .search { flex: 1; display: flex; align-items: center; justify-content: center; }
+        .search-bar { display: flex; width: min(720px, 90%); }
+        .search-bar input { flex: 1; height: 40px; padding: 0 12px; background: #121212; border: 1px solid #303030; border-right: none; color: var(--text); border-radius: 20px 0 0 20px; }
+        .search-bar button { width: 64px; height: 40px; border: 1px solid #303030; background: #222; color: var(--text); border-radius: 0 20px 20px 0; cursor: pointer; }
+        .search-bar button:hover { background: #2b2b2b; }
+        .right { width: 200px; display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+        .chip-row { display: flex; gap: 10px; padding: 8px 16px; border-bottom: 1px solid #222; background: #0f0f0f; overflow-x: auto; }
+        .chip { background: var(--chip); color: var(--text); padding: 8px 12px; border-radius: 16px; white-space: nowrap; font-size: 14px; cursor: pointer; border: 1px solid #303030; }
+        .chip.active { background: #ffffff; color: #000; }
+        .content { display: grid; grid-template-columns: 1fr 360px; gap: 16px; padding: 16px; overflow: auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; align-content: start; }
+        .card { background: transparent; border-radius: 12px; overflow: hidden; cursor: pointer; }
+        .thumb { position: relative; background: #111; border-radius: 12px; overflow: hidden; }
+        .thumb iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; display: block; }
+        .duration { position: absolute; right: 8px; bottom: 8px; background: rgba(0,0,0,0.8); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+        .meta { display: grid; grid-template-columns: 36px 1fr; gap: 10px; padding: 10px 6px 0; }
+        .avatar { width: 36px; height: 36px; border-radius: 50%; background: #333; }
+        .title { font-size: 16px; line-height: 1.3; margin-bottom: 4px; color: var(--text); }
+        .subline { font-size: 13px; color: var(--muted); }
+        .sidebar { position: sticky; top: 56px; height: calc(100vh - 56px - 48px); overflow: auto; }
+        .sidebar .section-title { font-weight: 600; margin: 0 0 8px 0; }
+        .shorts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+        .short { background: transparent; }
+        .short .thumb iframe { aspect-ratio: 9 / 16; height: 480px; }
+        .link { color: #3ea6ff; text-decoration: none; }
+        @media (max-width: 1024px) { .content { grid-template-columns: 1fr; } .sidebar { position: static; height: auto; } }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <div class="left">
+                <div class="hamburger" title="Menu">☰</div>
+                <div class="logo">
+                    <img src="assets/icons/youtube/youtube-logo.svg" alt="YouTube" style="width: 90px; height: 20px;" />
+                </div>
+            </div>
+            <div class="search">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search" />
+                    <button>🔍</button>
+                </div>
+            </div>
+            <div class="right">
+                <a class="link" href="https://www.youtube.com/@aaqibjeelani" target="_blank" rel="noopener">@aaqibjeelani</a>
+            </div>
+        </div>
+
+        <div class="chip-row">
+            <div class="chip active">All</div>
+            <div class="chip">Web Dev</div>
+            <div class="chip">Programming</div>
+            <div class="chip">Portfolio</div>
+            <div class="chip">Tech</div>
+            <div class="chip">Shorts</div>
+        </div>
+
+        <div class="content">
+            <div class="grid">
+                <div class="card">
+                    <div class="thumb"><iframe src="https://www.youtube.com/embed/gGL8wEvHhLo" allowfullscreen></iframe><div class="duration">10:12</div></div>
+                    <div class="meta">
+                        <div class="avatar"></div>
+                        <div>
+                            <div class="title">Featured Video - gGL8wEvHhLo</div>
+                            <div class="subline">Aaqib Jeelani • 12K views • 2 weeks ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="thumb"><iframe src="https://www.youtube.com/embed/VWJWzfDDS7c" allowfullscreen></iframe><div class="duration">08:34</div></div>
+                    <div class="meta">
+                        <div class="avatar"></div>
+                        <div>
+                            <div class="title">Video - VWJWzfDDS7c</div>
+                            <div class="subline">Aaqib Jeelani • 8.4K views • 1 month ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="thumb"><iframe src="https://www.youtube.com/embed/sYYEUzkoUvE" allowfullscreen></iframe><div class="duration">06:02</div></div>
+                    <div class="meta">
+                        <div class="avatar"></div>
+                        <div>
+                            <div class="title">Video - sYYEUzkoUvE</div>
+                            <div class="subline">Aaqib Jeelani • 5.1K views • 3 weeks ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="thumb"><iframe src="https://www.youtube.com/embed/uMTiQ9Aep2E" allowfullscreen></iframe><div class="duration">09:45</div></div>
+                    <div class="meta">
+                        <div class="avatar"></div>
+                        <div>
+                            <div class="title">Video - uMTiQ9Aep2E</div>
+                            <div class="subline">Aaqib Jeelani • 3.2K views • 1 month ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="thumb"><iframe src="https://www.youtube.com/embed/nHBUWYeOMGI" allowfullscreen></iframe><div class="duration">04:27</div></div>
+                    <div class="meta">
+                        <div class="avatar"></div>
+                        <div>
+                            <div class="title">Video - nHBUWYeOMGI</div>
+                            <div class="subline">Aaqib Jeelani • 2.1K views • 2 months ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="thumb"><iframe src="https://www.youtube.com/embed/7n7CJUcKBUU" allowfullscreen></iframe><div class="duration">11:03</div></div>
+                    <div class="meta">
+                        <div class="avatar"></div>
+                        <div>
+                            <div class="title">Video - 7n7CJUcKBUU</div>
+                            <div class="subline">Aaqib Jeelani • 9.8K views • 2 months ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="section-title">Shorts</div>
+                <div class="shorts-grid">
+                    <div class="short">
+                        <div class="thumb"><iframe src="https://www.youtube.com/embed/62hq0VqBkrM" allowfullscreen></iframe></div>
+                        <div class="title" style="padding:8px 2px 0;">Short - 62hq0VqBkrM</div>
+                        <div class="subline">15K views</div>
+                    </div>
+                    <div class="short">
+                        <div class="thumb"><iframe src="https://www.youtube.com/embed/ZITqcTOTjjk" allowfullscreen></iframe></div>
+                        <div class="title" style="padding:8px 2px 0;">Short - ZITqcTOTjjk</div>
+                        <div class="subline">9.3K views</div>
+                    </div>
+                    <div class="short">
+                        <div class="thumb"><iframe src="https://www.youtube.com/embed/Pvki1GNReJA" allowfullscreen></iframe></div>
+                        <div class="title" style="padding:8px 2px 0;">Short - Pvki1GNReJA</div>
+                        <div class="subline">12K views</div>
+                    </div>
+                </div>
+                <div style="margin-top:16px;">
+                    <a class="link" href="https://www.youtube.com/@aaqibjeelani" target="_blank" rel="noopener">Visit Channel →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

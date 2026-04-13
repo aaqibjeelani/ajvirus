@@ -2257,3 +2257,29 @@ body.dark-mode .lazy-placeholder {
         width: 100%;
     }
 } 
+/* Portfolio Link in Navbar */
+.portfolio-link {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+}
+
+.portfolio-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+}
+
+.portfolio-link i {
+    font-size: 0.9em;
+}
+
+body.dark-mode .portfolio-link {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
