@@ -47,35 +47,34 @@ body.dark-mode .clients-slider-container::after {
 
 .clients-slider {
     display: flex;
-    gap: 60px;
-    animation: slideClients 30s linear infinite;
+    gap: 40px;
     width: max-content;
 }
 
-.clients-slider:hover {
-    animation-play-state: paused;
+/* Swiper specific adjustments */
+.clients-swiper {
+    padding: 20px 0;
 }
 
-@keyframes slideClients {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
+.clients-swiper .swiper-wrapper {
+    transition-timing-function: linear !important;
+}
+
+.clients-swiper .swiper-slide {
+    width: 160px;
 }
 
 .client-logo {
     flex: 0 0 auto;
-    width: 200px;
-    height: 120px;
+    width: 160px;
+    height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: white;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
@@ -151,36 +150,32 @@ body.dark-mode .client-skeleton {
     }
     
     .client-logo {
-        width: 160px;
-        height: 100px;
-        padding: 15px;
+        width: 140px;
+        height: 80px;
+        padding: 12px;
+    }
+    
+    .clients-swiper .swiper-slide {
+        width: 140px;
     }
     
     .clients-slider {
-        gap: 40px;
-        animation-duration: 25s;
-    }
-    
-    .clients-slider-container::before,
-    .clients-slider-container::after {
-        width: 80px;
+        gap: 30px;
     }
 }
 
 @media (max-width: 576px) {
     .client-logo {
-        width: 140px;
-        height: 90px;
-        padding: 12px;
+        width: 120px;
+        height: 70px;
+        padding: 10px;
+    }
+    
+    .clients-swiper .swiper-slide {
+        width: 120px;
     }
     
     .clients-slider {
-        gap: 30px;
-        animation-duration: 20s;
-    }
-    
-    .clients-slider-container::before,
-    .clients-slider-container::after {
-        width: 50px;
+        gap: 20px;
     }
 }
