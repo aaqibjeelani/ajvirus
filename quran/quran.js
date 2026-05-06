@@ -62,10 +62,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function fetchSajdaData() {
+    const cached = localStorage.getItem('al_noor_sajdas');
+    if (cached) {
+        state.mushaf.sajdas = JSON.parse(cached);
+        return;
+    }
     try {
         const res = await fetch(`${API_BASE}/sajda`);
         const data = await res.json();
         state.mushaf.sajdas = data.data.ayahs.map(a => a.number);
+        localStorage.setItem('al_noor_sajdas', JSON.stringify(state.mushaf.sajdas));
     } catch (e) { console.error('Sajda load failed'); }
 }
 
@@ -358,10 +364,17 @@ function saveAndReloadPrayer() {
 
 // Surah List
 async function loadSurahList() {
+    const cached = localStorage.getItem('al_noor_surah_list');
+    if (cached) {
+        state.surahData = JSON.parse(cached);
+        calculateOffsets();
+        return;
+    }
     try {
         const res = await fetch(`${API_BASE}/surah`);
         const data = await res.json();
         state.surahData = data.data;
+        localStorage.setItem('al_noor_surah_list', JSON.stringify(state.surahData));
         calculateOffsets();
     } catch (e) {
         showToast('Failed to load Surah list');
@@ -386,7 +399,7 @@ async function loadSurah(number) {
     const container = document.getElementById('dynamicContent');
 
     let resumeHtml = '';
-    
+
     // Mushaf Resume (Tilawat)
     const lastPage = localStorage.getItem('mushaf_last_page');
     const lastTitle = localStorage.getItem('mushaf_last_title');
@@ -557,13 +570,13 @@ async function openMushaf(id, type = 'surah') {
 async function initMushafFlipBook() {
     const container = document.getElementById('flipBook');
     if (!container) return;
-    
+
     if (typeof St === 'undefined' || !St.PageFlip) {
         console.error("PageFlip library not loaded. Check connection or CSP.");
         return Promise.reject("Library not loaded");
     }
 
-    container.innerHTML = ''; 
+    container.innerHTML = '';
     container.style.display = 'block';
     container.style.visibility = 'visible';
     container.style.opacity = '1';
@@ -580,17 +593,17 @@ async function initMushafFlipBook() {
     // Create 604 pages (604 to 1) in REVERSE index
     const fragment = document.createDocumentFragment();
     const lastPage = parseInt(localStorage.getItem('mushaf_last_page') || '1');
-    
+
     for (let i = 604; i >= 1; i--) {
         const pageNum = i.toString().padStart(3, '0');
         const pageDiv = document.createElement('div');
         pageDiv.className = 'page';
-        
+
         // Only set src for the current target page, others use data-src for lazy loading
         const isInitial = (i === lastPage);
         const srcAttr = isInitial ? `src="pages/${pageNum}.png"` : '';
         const dataSrcAttr = `data-src="pages/${pageNum}.png"`;
-        
+
         pageDiv.innerHTML = `
             <div class="page-content">
                 <div class="page-loading"><div class="spinner-small"></div></div>
@@ -610,10 +623,10 @@ async function initMushafFlipBook() {
         showCover: false,
         usePortrait: true,
         mode: 'portrait',
-        flippingTime: 800,
+        flippingTime: 1000,
         startPage: 0,
         drawShadow: true,
-        maxShadowOpacity: 0.2,
+        maxShadowOpacity: 0.5,
         showPageCorners: true,
         clickEventForward: false,
         useMouseEvents: true
@@ -622,19 +635,19 @@ async function initMushafFlipBook() {
     return new Promise((resolve) => {
         setTimeout(() => {
             mushafFlipBook.loadFromHTML(container.querySelectorAll(".page"));
-            
-            mushafFlipBook.on('flip', (e) => {
-            const libraryIndex = e.data;
-            const targetPage = 604 - libraryIndex;
-            updateMushafUI(targetPage);
-            loadMushafSurroundingPages(libraryIndex);
-        });
 
-        // Initial UI and Lazy Loading
-        const initialLibraryIndex = 604 - lastPage;
-        updateMushafUI(lastPage);
-        loadMushafSurroundingPages(initialLibraryIndex);
-        mushafFlipBook.turnToPage(initialLibraryIndex);
+            mushafFlipBook.on('flip', (e) => {
+                const libraryIndex = e.data;
+                const targetPage = 604 - libraryIndex;
+                updateMushafUI(targetPage);
+                loadMushafSurroundingPages(libraryIndex);
+            });
+
+            // Initial UI and Lazy Loading
+            const initialLibraryIndex = 604 - lastPage;
+            updateMushafUI(lastPage);
+            loadMushafSurroundingPages(initialLibraryIndex);
+            mushafFlipBook.turnToPage(initialLibraryIndex);
 
             resolve();
         }, 150);
@@ -642,22 +655,21 @@ async function initMushafFlipBook() {
 }
 
 function mushafNext() {
-    // In reversed index, moving "Forward" in Quran means moving to a "Previous" library index
+    // Corrected: Moving forward in reading order (1->2) means decreasing the reversed index (603->602)
     if (mushafFlipBook) mushafFlipBook.flipPrev();
 }
 
 function mushafPrev() {
-    // Moving "Backward" in Quran means moving to a "Next" library index
+    // Corrected: Moving backward in reading order (2->1) means increasing the reversed index (602->603)
     if (mushafFlipBook) mushafFlipBook.flipNext();
 }
 
-function updateMushafUI(libraryIndex) {
-    const quranPage = 604 - libraryIndex;
+function updateMushafUI(quranPage) {
     const pageInfo = document.getElementById('mushafPageInfo');
     if (pageInfo) pageInfo.textContent = `Page ${quranPage} / 604`;
 
     const juzPages = [1, 22, 42, 62, 82, 102, 122, 142, 162, 182, 202, 222, 242, 262, 282, 302, 322, 342, 362, 382, 402, 422, 442, 462, 482, 502, 522, 542, 562, 582];
-    
+
     // Find Current Juz
     let currentJuz = 1;
     for (let i = 0; i < juzPages.length; i++) {
@@ -672,7 +684,7 @@ function updateMushafUI(libraryIndex) {
     const juzStart = juzPages[currentJuz - 1];
     const juzEnd = juzPages[currentJuz] || 605;
     const juzProgress = ((quranPage - juzStart) / (juzEnd - juzStart)) * 100;
-    
+
     const progressBar = document.getElementById('juzProgressBar');
     if (progressBar) progressBar.style.width = `${Math.max(0, Math.min(100, juzProgress))}%`;
 
@@ -723,7 +735,48 @@ function toggleMushafSelector() {
     if (sel.classList.contains('active')) renderMushafSelector('surah');
 }
 
-function renderMushafSelector(type) {// Lazy load images surrounding the current library index
+function renderMushafSelector(type) {
+    const list = document.getElementById('mushafSelectorList');
+    const tabSurah = document.getElementById('tabMushafSurah');
+    const tabJuz = document.getElementById('tabMushafJuz');
+
+    if (!tabSurah || !tabJuz || !list) return;
+
+    tabSurah.classList.toggle('active', type === 'surah');
+    tabJuz.classList.toggle('active', type === 'juz');
+
+    if (type === 'surah') {
+        list.innerHTML = state.surahData.map(s => `
+            <div class="sidebar-item" onclick="selectSurahInMushaf(${s.number})">
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <div>
+                        <div style="font-weight: 600;">${s.number}. ${s.englishName}</div>
+                        <div style="font-family: 'Amiri', serif;">${s.name}</div>
+                    </div>
+                    <button class="juz-download-btn" onclick="event.stopPropagation(); downloadMushafSurah(${s.number})" title="Download Surah for offline">📥</button>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        let juzHtml = '';
+        for (let i = 1; i <= 30; i++) {
+            juzHtml += `
+                <div class="sidebar-item" onclick="selectJuzInMushaf(${i})">
+                    <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                        <div>
+                            <div style="font-weight: 600;">Juz (Para) ${i}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Go to Para ${i}</div>
+                        </div>
+                        <button class="juz-download-btn" onclick="event.stopPropagation(); downloadMushafJuz(${i})" title="Download Juz for offline">📥</button>
+                    </div>
+                </div>
+            `;
+        }
+        list.innerHTML = juzHtml;
+    }
+}
+
+// Lazy load images surrounding the current library index
 function loadMushafSurroundingPages(libraryIndex) {
     const container = document.getElementById('flipBook');
     if (!container) return;
@@ -739,28 +792,32 @@ function loadMushafSurroundingPages(libraryIndex) {
     }
 }
 
-// Offline Juz Download helper
+// Offline Download helpers
+async function downloadMushafSurah(surahNum) {
+    const startPage = surahStartPages[surahNum];
+    const endPage = (surahNum < 114) ? surahStartPages[surahNum + 1] - 1 : 604;
+    await downloadPageRange(`Surah ${surahNum}`, startPage, endPage);
+}
+
 async function downloadMushafJuz(juzNum) {
     const juzPages = [1, 22, 42, 62, 82, 102, 122, 142, 162, 182, 202, 222, 242, 262, 282, 302, 322, 342, 362, 382, 402, 422, 442, 462, 482, 502, 522, 542, 562, 582, 605];
     const startPage = juzPages[juzNum - 1];
     const endPage = juzPages[juzNum] - 1;
-    
-    if (typeof showToast === 'function') showToast(`Downloading Juz ${juzNum} for offline use...`);
-    
+    await downloadPageRange(`Juz ${juzNum}`, startPage, endPage);
+}
+
+async function downloadPageRange(label, start, end) {
+    if (typeof showToast === 'function') showToast(`Downloading ${label}...`);
     let successCount = 0;
-    const total = endPage - startPage + 1;
-    
-    for (let p = startPage; p <= endPage; p++) {
+    const total = end - start + 1;
+    for (let p = start; p <= end; p++) {
         const url = `pages/${p.toString().padStart(3, '0')}.png`;
         try {
-            await fetch(url); // Service worker will cache it
+            await fetch(url);
             successCount++;
-        } catch (e) {
-            console.warn(`Failed to pre-download page ${p}`);
-        }
+        } catch (e) { console.warn(`Failed: ${url}`); }
     }
-    
-    if (typeof showToast === 'function') showToast(`✅ Juz ${juzNum} ready offline (${successCount}/${total} pages)`);
+    if (typeof showToast === 'function') showToast(`✅ ${label} ready offline (${successCount}/${total} pages)`);
 }
 function renderMushafSelector(type) {
     const list = document.getElementById('mushafSelectorList');
@@ -775,8 +832,13 @@ function renderMushafSelector(type) {
     if (type === 'surah') {
         list.innerHTML = state.surahData.map(s => `
             <div class="sidebar-item" onclick="selectSurahInMushaf(${s.number})">
-                <div style="font-weight: 600;">${s.number}. ${s.englishName}</div>
-                <div style="font-family: 'Amiri', serif;">${s.name}</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <div>
+                        <div style="font-weight: 600;">${s.number}. ${s.englishName}</div>
+                        <div style="font-family: 'Amiri', serif;">${s.name}</div>
+                    </div>
+                    <button class="juz-download-btn" onclick="event.stopPropagation(); downloadMushafSurah(${s.number})" title="Download Surah for offline">📥</button>
+                </div>
             </div>
         `).join('');
     } else {
@@ -789,7 +851,7 @@ function renderMushafSelector(type) {
                             <div style="font-weight: 600;">Juz (Para) ${i}</div>
                             <div style="font-size: 0.8rem; opacity: 0.7;">Go to Para ${i}</div>
                         </div>
-                        <button class="juz-download-btn" onclick="event.stopPropagation(); downloadMushafJuz(${i})" title="Download for offline">📥</button>
+                        <button class="juz-download-btn" onclick="event.stopPropagation(); downloadMushafJuz(${i})" title="Download Juz for offline">📥</button>
                     </div>
                 </div>
             `;
@@ -1368,6 +1430,7 @@ function changeReciter(val) {
     localStorage.setItem('al_noor_reciter', val);
     showToast('Reciter updated');
 }
+
 
 function updateNavActive(tab) {
     document.querySelectorAll('.nav-item').forEach(item => {
