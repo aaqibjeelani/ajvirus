@@ -67,7 +67,7 @@
     // Don't show if already dismissed recently OR already installed
     if (isInStandaloneMode()) return;
     
-    const dismissed = localStorage.getItem('al_no_install_dismissed');
+    const dismissed = localStorage.getItem('al_noor_install_dismissed');
     const dismissedAt = parseInt(dismissed || '0');
     const threeDays = 3 * 24 * 60 * 60 * 1000;
     if (Date.now() - dismissedAt < threeDays) return;
@@ -105,7 +105,9 @@
 
   function hideInstallBanner() {
     const banner = document.getElementById('installBanner');
-    if (banner) banner.classList.remove('visible');
+    if (banner) {
+      banner.classList.remove('visible');
+    }
   }
 
   // Install button click

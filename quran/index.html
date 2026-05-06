@@ -47,9 +47,9 @@
         /* ── PWA INSTALL BANNER ─────────────────────────── */
         #installBanner {
             position: fixed;
-            bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+            bottom: calc(var(--nav-height) + var(--safe-bottom) + 20px);
             left: 50%;
-            transform: translateX(-50%) translateY(120%);
+            transform: translateX(-50%) translateY(250%);
             width: calc(100% - 24px);
             max-width: 450px;
             background: linear-gradient(135deg, #1e6f5c 0%, #184d3f 100%);
@@ -59,12 +59,20 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            z-index: 10001;
-            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            z-index: 100002;
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s, visibility 0.4s;
             border: 1px solid rgba(255,255,255,0.15);
+            pointer-events: none;
         }
-        #installBanner.visible { transform: translateX(-50%) translateY(0); }
+        #installBanner.visible { 
+            transform: translateX(-50%) translateY(0); 
+            opacity: 1; 
+            visibility: visible;
+            pointer-events: all;
+        }
         #installBanner .install-icon {
             font-size: 2rem;
             flex-shrink: 0;
