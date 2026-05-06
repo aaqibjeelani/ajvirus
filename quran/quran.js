@@ -385,11 +385,23 @@ async function loadSurah(number) {
     state.currentSurah = number;
     const container = document.getElementById('dynamicContent');
 
-    // Resume Cards
-    const lastSurah = localStorage.getItem('mushaf_last_surah');
-    const lastTitle = localStorage.getItem('mushaf_last_title');
     let resumeHtml = '';
     
+    // Mushaf Resume (Tilawat)
+    const lastPage = localStorage.getItem('mushaf_last_page');
+    const lastTitle = localStorage.getItem('mushaf_last_title');
+    if (lastPage) {
+        resumeHtml += `
+            <div class="resume-card" onclick="openMushaf(${lastPage}, 'page')">
+                <div class="resume-info">
+                    <div class="resume-label">RESUME TILAWAT</div>
+                    <div class="resume-title">${lastTitle || 'Last Session'} (Page ${lastPage})</div>
+                </div>
+                <div class="resume-btn">Continue 📖</div>
+            </div>
+        `;
+    }
+
     // PDF Resume
     const lastPdfUrl = localStorage.getItem('last_opened_pdf_url');
     const lastPdfTitle = localStorage.getItem('last_opened_pdf_title');
@@ -401,19 +413,6 @@ async function loadSurah(number) {
                     <div class="resume-title">${lastPdfTitle}</div>
                 </div>
                 <div class="resume-btn">Open 📚</div>
-            </div>
-        `;
-    }
-
-    // Mushaf Resume
-    if (lastSurah) {
-        resumeHtml += `
-            <div class="resume-card" onclick="openMushaf(${lastSurah}, '${localStorage.getItem('mushaf_mode') || 'surah'}', 0)">
-                <div class="resume-info">
-                    <div class="resume-label">CONTINUE READING</div>
-                    <div class="resume-title">${lastTitle || 'Last Session'}</div>
-                </div>
-                <div class="resume-btn">Resume 📖</div>
             </div>
         `;
     }
@@ -492,66 +491,214 @@ function renderSurah(arabicSurah, transSurah) {
 }
 
 function toggleReadingMode() {
-    // Check if we have a saved session to resume
-    const savedSurah = parseInt(localStorage.getItem('mushaf_last_surah'));
-    const surahToOpen = savedSurah || state.currentSurah || 1;
-    openMushaf(surahToOpen);
+    const savedPage = localStorage.getItem('mushaf_last_page');
+    if (savedPage) {
+        openMushaf(savedPage, 'page');
+    } else {
+        openMushaf(state.currentSurah || 1, 'surah');
+    }
 }
 
-// ── MUSHAF VIEWER LOGIC ───────────────────
-async function openMushaf(id, type = 'surah', pageNum = null) {
-    const savedSurah = parseInt(localStorage.getItem('mushaf_last_surah'));
-    const savedJuz = parseInt(localStorage.getItem('mushaf_last_juz'));
-    const savedPage = parseInt(localStorage.getItem('mushaf_last_page'));
-    const savedMode = localStorage.getItem('mushaf_mode') || 'surah';
+// ── MUSHAF VIEWER LOGIC (PNG FLIPBOOK) ───────────────────
+let mushafFlipBook = null;
 
-    if (pageNum === null) {
-        if (type === savedMode && (id === (type === 'surah' ? savedSurah : savedJuz))) {
-            pageNum = savedPage;
+const surahStartPages = {
+    1: 1, 2: 2, 3: 50, 4: 77, 5: 106, 6: 128, 7: 151, 8: 177, 9: 187, 10: 208,
+    11: 221, 12: 235, 13: 249, 14: 255, 15: 262, 16: 267, 17: 282, 18: 293, 19: 305, 20: 312,
+    21: 322, 22: 332, 23: 342, 24: 350, 25: 359, 26: 367, 27: 377, 28: 385, 29: 396, 30: 404,
+    31: 411, 32: 415, 33: 418, 34: 428, 35: 434, 36: 440, 37: 446, 38: 453, 39: 458, 40: 467,
+    41: 477, 42: 483, 43: 489, 44: 496, 45: 499, 46: 502, 47: 507, 48: 511, 49: 515, 50: 518,
+    51: 520, 52: 523, 53: 526, 54: 528, 55: 531, 56: 534, 57: 537, 58: 542, 59: 545, 60: 549,
+    61: 551, 62: 553, 63: 554, 64: 556, 65: 558, 66: 560, 67: 562, 68: 564, 69: 566, 70: 568,
+    71: 570, 72: 572, 73: 574, 74: 575, 75: 577, 76: 578, 77: 580, 78: 582, 79: 583, 80: 585,
+    81: 586, 82: 587, 83: 587, 84: 589, 85: 590, 86: 591, 87: 591, 88: 592, 89: 593, 90: 594,
+    91: 595, 92: 595, 93: 596, 94: 596, 95: 597, 96: 597, 97: 598, 98: 598, 99: 599, 100: 599,
+    101: 600, 102: 600, 103: 601, 104: 601, 105: 601, 106: 602, 107: 602, 108: 602, 109: 603, 110: 603,
+    111: 603, 112: 604, 113: 604, 114: 604
+};
+
+async function openMushaf(id, type = 'surah') {
+    const overlay = document.getElementById('mushafOverlay');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Initialize flipbook if not already done
+    if (!mushafFlipBook) {
+        await initMushafFlipBook();
+    }
+
+    let targetPage = 1;
+    if (type === 'page') {
+        targetPage = parseInt(id) || 1;
+    } else if (type === 'surah') {
+        targetPage = surahStartPages[id] || 1;
+    } else if (type === 'juz') {
+        const juzPages = [1, 22, 42, 62, 82, 102, 122, 142, 162, 182, 202, 222, 242, 262, 282, 302, 322, 342, 362, 382, 402, 422, 442, 462, 482, 502, 522, 542, 562, 582];
+        targetPage = juzPages[id - 1] || 1;
+    } else {
+        targetPage = id;
+    }
+
+    // Map Quran Page (1-604) to Flipbook Index (0-603)
+    // Page 1 is Index 603, Page 604 is Index 0
+    const flipIndex = 604 - targetPage;
+
+    // Small delay to ensure library readiness and layout calculation
+    setTimeout(() => {
+        if (mushafFlipBook) {
+            mushafFlipBook.turnToPage(flipIndex);
+            // Save last session
+            localStorage.setItem('mushaf_last_page', targetPage);
+            localStorage.setItem('mushaf_last_surah', type === 'surah' ? id : 1);
+        }
+    }, 200);
+}
+
+async function initMushafFlipBook() {
+    const container = document.getElementById('flipBook');
+    container.innerHTML = ''; // Clear
+    container.style.display = 'block';
+
+    // Fixed pixel dimensions for absolute control
+    const bookW = 450;
+    const bookH = 650;
+
+    container.style.width = `${bookW}px`;
+    container.style.height = `${bookH}px`;
+    container.style.margin = '0 auto';
+    container.style.display = 'block';
+
+    // Create 604 pages (604 to 1) in REVERSE index
+    const fragment = document.createDocumentFragment();
+    for (let i = 604; i >= 1; i--) {
+        const pageNum = i.toString().padStart(3, '0');
+        const pageDiv = document.createElement('div');
+        pageDiv.className = 'page';
+        pageDiv.innerHTML = `
+            <div class="page-content">
+                <div class="page-loading"><div class="spinner-small"></div></div>
+                <img src="pages/${pageNum}.png" class="mushaf-img" alt="Page ${i}" loading="lazy"
+                     onload="if(this.previousElementSibling)this.previousElementSibling.remove()">
+            </div>
+        `;
+        fragment.appendChild(pageDiv);
+    }
+    container.appendChild(fragment);
+
+    mushafFlipBook = new St.PageFlip(container, {
+        width: bookW,
+        height: bookH,
+        size: "fixed", // CRITICAL: Disable auto-stretching
+        showCover: false,
+        usePortrait: true,
+        mode: 'portrait',
+        flippingTime: 800,
+        startPage: 0,
+        drawShadow: true,
+        maxShadowOpacity: 0.2,
+        showPageCorners: true,
+        clickEventForward: false,
+        useMouseEvents: true
+    });
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            mushafFlipBook.loadFromHTML(container.querySelectorAll(".page"));
+            
+            mushafFlipBook.on('flip', (e) => {
+                const pageIndex = e.data;
+                updateMushafUI(pageIndex);
+                localStorage.setItem('mushaf_last_page', pageIndex);
+            });
+
+            updateMushafUI(mushafFlipBook.getCurrentPageIndex());
+            resolve();
+        }, 150);
+    });
+}
+
+function mushafNext() {
+    // In reversed index, moving "Forward" in Quran means moving to a "Previous" library index
+    if (mushafFlipBook) mushafFlipBook.flipPrev();
+}
+
+function mushafPrev() {
+    // Moving "Backward" in Quran means moving to a "Next" library index
+    if (mushafFlipBook) mushafFlipBook.flipNext();
+}
+
+function updateMushafUI(libraryIndex) {
+    // Map Library Index (0-603) back to Quran Page Number (604-1)
+    const quranPage = 604 - libraryIndex;
+    
+    const pageInfo = document.getElementById('mushafPageInfo');
+    if (pageInfo) pageInfo.textContent = `Page ${quranPage} / 604`;
+
+    const juzPages = [1, 22, 42, 62, 82, 102, 122, 142, 162, 182, 202, 222, 242, 262, 282, 302, 322, 342, 362, 382, 402, 422, 442, 462, 482, 502, 522, 542, 562, 582];
+    
+    // Find Current Juz
+    let currentJuz = 1;
+    for (let i = 0; i < juzPages.length; i++) {
+        if (quranPage >= juzPages[i]) {
+            currentJuz = i + 1;
         } else {
-            pageNum = 0;
+            break;
         }
     }
 
-    state.mushaf.active = true;
-    state.mushaf.mode = type;
-    if (type === 'surah') state.mushaf.currentSurah = id;
-    else state.mushaf.currentJuz = id;
-    state.mushaf.currentPage = pageNum;
+    // Calculate Juz Progress
+    const juzStart = juzPages[currentJuz - 1];
+    const juzEnd = juzPages[currentJuz] || 605;
+    const juzProgress = ((quranPage - juzStart) / (juzEnd - juzStart)) * 100;
+    
+    const progressBar = document.getElementById('juzProgressBar');
+    if (progressBar) progressBar.style.width = `${Math.max(0, Math.min(100, juzProgress))}%`;
 
-    document.getElementById('mushafOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
+    // Find Surah Name
+    let highestStarted = 1;
+    for (let sId in surahStartPages) {
+        if (surahStartPages[sId] <= quranPage) {
+            highestStarted = sId;
+        } else {
+            break;
+        }
+    }
 
-    // Add scroll listener for persistence
-    const content = document.getElementById('mushafContent');
-    content.onscroll = () => {
-        localStorage.setItem('mushaf_last_scroll', content.scrollTop);
-    };
-
-    localStorage.setItem('mushaf_mode', type);
-    localStorage.setItem('mushaf_last_surah', state.mushaf.currentSurah);
-    localStorage.setItem('mushaf_last_juz', state.mushaf.currentJuz);
-    localStorage.setItem('mushaf_last_page', pageNum);
-
-    await loadMushafData(id, type);
+    const sData = state.surahData.find(s => s.number == highestStarted);
+    if (sData) {
+        document.getElementById('mushafTitle').textContent = sData.englishName;
+        document.getElementById('mushafJuzInfo').textContent = `Juz ${currentJuz} • ${juzEnd - quranPage} pages left in Juz`;
+        localStorage.setItem('mushaf_last_title', sData.englishName);
+    }
 }
 
 function closeMushaf() {
-    state.mushaf.active = false;
     document.getElementById('mushafOverlay').classList.remove('active');
     document.body.style.overflow = '';
 }
 
+function mushafNext() {
+    if (mushafFlipBook) mushafFlipBook.flipNext();
+}
+
+function mushafPrev() {
+    if (mushafFlipBook) mushafFlipBook.flipPrev();
+}
+
+function selectSurahInMushaf(num) {
+    toggleMushafSelector();
+    openMushaf(num, 'surah');
+}
+
+function selectJuzInMushaf(num) {
+    toggleMushafSelector();
+    openMushaf(num, 'juz');
+}
+
 function toggleMushafSelector() {
     const sel = document.getElementById('mushafSelector');
-    const isActive = sel.classList.contains('active');
-
-    if (!isActive) {
-        sel.classList.add('active');
-        renderMushafSelector('surah');
-    } else {
-        sel.classList.remove('active');
-    }
+    sel.classList.toggle('active');
+    if (sel.classList.contains('active')) renderMushafSelector('surah');
 }
 
 function renderMushafSelector(type) {
@@ -566,8 +713,7 @@ function renderMushafSelector(type) {
 
     if (type === 'surah') {
         list.innerHTML = state.surahData.map(s => `
-            <div class="sidebar-item ${s.number === state.mushaf.currentSurah ? 'active' : ''}" 
-                 onclick="selectSurahInMushaf(${s.number})">
+            <div class="sidebar-item" onclick="selectSurahInMushaf(${s.number})">
                 <div style="font-weight: 600;">${s.number}. ${s.englishName}</div>
                 <div style="font-family: 'Amiri', serif;">${s.name}</div>
             </div>
@@ -584,172 +730,6 @@ function renderMushafSelector(type) {
         }
         list.innerHTML = juzHtml;
     }
-}
-
-async function loadMushafData(id, type = 'surah') {
-    const content = document.getElementById('mushafContent');
-    const textContainer = document.getElementById('mushafTextContainer');
-
-    if (!textContainer) return;
-
-    textContainer.style.opacity = '0.3';
-    let loader = content.querySelector('.loading-overlay');
-    if (!loader) {
-        loader = document.createElement('div');
-        loader.className = 'loading-overlay';
-        loader.innerHTML = '<div class="spinner"></div>';
-        content.appendChild(loader);
-    }
-
-    try {
-        const endpoint = type === 'surah' ? `surah/${id}` : `juz/${id}/quran-simple`;
-        const res = await fetch(`${API_BASE}/${endpoint}`);
-        const data = await res.json();
-        const apiData = data.data;
-
-        const ayahs = apiData.ayahs;
-        const firstAyah = ayahs[0];
-
-        if (type === 'surah') {
-            document.getElementById('mushafTitle').textContent = apiData.englishName;
-            document.getElementById('mushafJuzInfo').textContent = `Juz ${firstAyah.juz} • ${apiData.englishName}`;
-        } else {
-            document.getElementById('mushafTitle').textContent = `Juz (Para) ${id}`;
-            document.getElementById('mushafJuzInfo').textContent = `Para ${id} • ${firstAyah.surah?.englishName || ''}`;
-        }
-
-        const bismillahStr = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
-
-        textContainer.innerHTML = `
-            <div class="mushaf-text">
-                ${ayahs.map((a, i) => {
-                    const isSajda = state.mushaf.sajdas.includes(a.number);
-                    // Detect Juz Start (Para start)
-                    let juzHeader = '';
-                    if (a.juz !== (ayahs[i-1]?.juz)) {
-                         juzHeader = `<div class="juz-separator">Juz (Para) ${a.juz} Started</div>`;
-                    }
-
-                    const highlightClass = isSajda ? 'sajdah-highlight' : '';
-
-                    let surahHeader = '';
-                    let cleanText = a.text;
-
-                    if (a.numberInSurah === 1) {
-                        const sNum = a.surah?.number || (type === 'surah' ? apiData.number : null);
-                        const sName = a.surah?.englishName || (type === 'surah' ? apiData.englishName : '');
-
-                        if (sNum !== 1) {
-                            surahHeader = `<div class="mushaf-surah-separator">${sName}</div>`;
-                            
-                            // Strip Bismillah from text if present and show it in a dedicated row
-                            if (sNum !== 9) {
-                                const bism = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
-                                // Use regex to handle potential hidden characters or variations
-                                const bismRegex = /^بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\s*/;
-                                if (bismRegex.test(cleanText)) {
-                                    cleanText = cleanText.replace(bismRegex, '').trim();
-                                }
-                                surahHeader += `<div class="bismillah-mushaf">${bism}</div>`;
-                            }
-                        }
-                    }
-
-                    return `${juzHeader}${surahHeader}<span class="${highlightClass}">${cleanText}</span> <span class="ayah-end">${a.numberInSurah}</span>`;
-                }).join(' ')}
-            </div>
-        `;
-
-        // Save metadata for resume
-        localStorage.setItem('mushaf_last_title', type === 'surah' ? apiData.englishName : `Para ${id}`);
-        
-        // Save scroll position and session metadata on scroll
-        const mushafContent = document.getElementById('mushafContent');
-        if (mushafContent) {
-            mushafContent.onscroll = () => {
-                localStorage.setItem('mushaf_last_scroll', mushafContent.scrollTop);
-                localStorage.setItem('mushaf_last_surah', id);
-                localStorage.setItem('mushaf_last_juz', apiData.ayahs[0].juz);
-                localStorage.setItem('mushaf_mode', type);
-                localStorage.setItem('mushaf_last_title', type === 'surah' ? apiData.englishName : `Para ${id}`);
-            };
-        }
-
-        textContainer.style.opacity = '1';
-        if (loader) loader.remove();
-
-        setTimeout(() => {
-            renderMushafPage(false);
-            // Restore scroll position
-            const savedScroll = parseInt(localStorage.getItem('mushaf_last_scroll'));
-            const savedSurah = parseInt(localStorage.getItem('mushaf_last_surah'));
-            const savedJuz = parseInt(localStorage.getItem('mushaf_last_juz'));
-            const savedMode = localStorage.getItem('mushaf_mode');
-
-            if (savedScroll && savedMode === type && (parseInt(id) === (type === 'surah' ? savedSurah : savedJuz))) {
-                document.getElementById('mushafContent').scrollTop = savedScroll;
-            } else {
-                document.getElementById('mushafContent').scrollTop = 0;
-            }
-        }, 300);
-
-    } catch (e) {
-        console.error(e);
-        if (loader) loader.remove();
-        textContainer.style.opacity = '1';
-        showToast('Error loading Mushaf data.');
-    }
-}
-
-function renderMushafPage(withFlip = false) {
-    const container = document.getElementById('mushafTextContainer');
-    if (container) container.style.transform = 'none';
-}
-
-function selectSurahInMushaf(num) {
-    toggleMushafSelector();
-    openMushaf(num, 'surah', 0);
-}
-
-function selectJuzInMushaf(num) {
-    toggleMushafSelector();
-    openMushaf(num, 'juz', 0);
-}
-
-function mushafNext() {
-    if (state.mushaf.currentPage < (state.mushaf.totalPages || 1) - 1) {
-        state.mushaf.currentPage++;
-        renderMushafPage();
-    } else {
-        if (state.mushaf.mode === 'surah') {
-            if (state.mushaf.currentSurah < 114) openMushaf(state.mushaf.currentSurah + 1, 'surah', 0);
-            else showToast('End of Quran');
-        } else {
-            if (state.mushaf.currentJuz < 30) openMushaf(state.mushaf.currentJuz + 1, 'juz', 0);
-            else showToast('End of Quran');
-        }
-    }
-}
-
-function mushafPrev() {
-    if (state.mushaf.currentPage > 0) {
-        state.mushaf.currentPage--;
-        renderMushafPage();
-    } else {
-        if (state.mushaf.currentSurah > 1) {
-            // Loading previous surah - should go to its LAST page
-            openMushafToLastPage(state.mushaf.currentSurah - 1);
-        }
-    }
-}
-
-async function openMushafToLastPage(surahNum) {
-    await openMushaf(surahNum);
-    // Wait for data to load and pages to be calculated
-    setTimeout(() => {
-        state.mushaf.currentPage = state.mushaf.totalPages - 1;
-        renderMushafPage();
-    }, 300);
 }
 
 // Audio Functions

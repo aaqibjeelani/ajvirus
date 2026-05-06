@@ -1682,16 +1682,12 @@ body {
 .mushaf-overlay {
     position: fixed;
     inset: 0;
-    background: #fbf3e4;
-    z-index: 5000;
+    background: #f8f9fa; /* Forced light background */
+    z-index: 10000;
     display: none;
     flex-direction: column;
+    color: #333 !important; /* Force dark text */
 }
-
-[data-theme="dark"] .mushaf-overlay {
-    background: #0f1117;
-}
-
 .mushaf-overlay.active {
     display: flex;
 }
@@ -1758,12 +1754,13 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--white);
+    background: #ffffff;
     z-index: 1100;
     transform: translateY(-100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
+    color: #000 !important; /* Force black text */
 }
 
 .mushaf-selector.active {
@@ -1796,6 +1793,27 @@ body {
     flex: 1;
     overflow-y: auto;
     padding-bottom: 40px;
+    color: #000 !important;
+}
+
+.sidebar-list#mushafSelectorList .sidebar-item {
+    color: #000 !important;
+}
+
+/* ── JUZ PROGRESS BAR ────────────────── */
+.juz-progress-container {
+    height: 4px;
+    background: rgba(0,0,0,0.1);
+    width: 100%;
+    position: relative;
+    z-index: 101;
+}
+
+.juz-progress-bar {
+    height: 100%;
+    background: #ffca28;
+    width: 0%;
+    transition: width 0.3s ease;
 }
 
 .mushaf-content {
@@ -1955,160 +1973,111 @@ body {
     display: none !important;
 }
 
-/* ── MUSHAF READING MODE (INDO-PAK) ──────────────── */
-.mushaf-overlay {
-    position: fixed;
-    inset: 0;
-    background: #fdfdfd;
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-.mushaf-overlay.active { visibility: visible; opacity: 1; }
-
-.mushaf-header {
-    background: #1e6f5c;
-    color: #fff;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
+/* ── REALISTIC FLIP-BOOK MUSHAF ──────── */
 .mushaf-content {
     flex: 1;
-    overflow-y: auto;
-    background: #f5f5f5;
-    padding: 20px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e2e8f0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    /* Force single page mode by limiting parent width */
+    max-width: 600px; 
+    margin: 0 auto;
+    width: 100%;
 }
 
-.mushaf-page {
-    max-width: 500px;
+.flip-book {
+    box-shadow: 0 0 50px rgba(0,0,0,0.3);
+    display: none;
     margin: 0 auto;
-    background: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    padding: 30px 20px;
-    min-height: 100%;
+    /* Limit width to ensure single page mode triggers */
+    max-width: 90vw;
+    max-height: 85vh;
+}
+
+.page {
+    background-color: #fdf6e3;
+    overflow: hidden;
+}
+
+.page-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
 }
 
-.mushaf-text {
-    font-family: 'Scheherazade New', serif;
-    font-size: 2.5rem;
-    line-height: 4.2rem;
-    text-align: justify;
-    direction: rtl;
-    color: #2c3e50;
-    word-spacing: 6px;
-}
-
-.bismillah-mushaf {
-    display: block;
+.mushaf-img {
     width: 100%;
-    text-align: center;
-    font-size: 2.4rem;
-    color: #1e6f5c;
-    margin: 20px 0;
-    padding: 10px 0;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
 }
 
-.mushaf-surah-separator {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #fff;
-    background: #1e6f5c;
-    padding: 8px;
-    border-radius: 10px;
-    margin: 30px 0 10px 0;
-    font-family: 'Outfit', sans-serif;
-}
-
-.juz-separator {
-    display: block;
-    width: 100%;
-    background: #dcfce7;
-    color: #166534;
-    text-align: center;
-    padding: 8px;
-    border-radius: 8px;
-    margin: 30px 0 15px 0;
-    font-weight: 800;
-    font-size: 1rem;
-    border: 1px solid #bbf7d0;
-    font-family: 'Outfit', sans-serif;
-}
-
-
-.ayah-end {
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.9rem;
-    background: #f1f5f9;
-    color: #64748b;
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    display: inline-flex;
+/* Loading state for pages */
+.page-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 4px;
-    vertical-align: middle;
-    border: 1px solid #cbd5e1;
+    background: #fdf6e3;
 }
 
-/* 13 Line Simulation Background */
-.mushaf-inner-border {
-    position: relative;
-    padding: 10px;
-    border: 1px solid #e2e8f0;
-}
-
-/* ── SAJDAH & JUZ HIGHLIGHTS ─────────────────── */
-.sajdah-highlight {
-    background: rgba(255, 202, 40, 0.2);
-    border-bottom: 2px solid #ffca28;
-    padding: 2px 0;
-}
-.juz-start-highlight {
-    color: #1e6f5c;
-    font-weight: 700;
-}
-
-/* ── RESUME CARD ──────────────────────────── */
-.resume-card {
-    background: linear-gradient(135deg, #1e6f5c 0%, #184d3f 100%);
-    margin: 16px 12px;
-    padding: 16px 20px;
-    border-radius: 20px;
+.mushaf-footer {
+    height: 70px;
+    background: #1e6f5c;
+    color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #fff;
-    box-shadow: 0 8px 24px rgba(30, 111, 92, 0.3);
-    cursor: pointer;
-    transition: transform 0.2s;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-.resume-card:active { transform: scale(0.98); }
-.resume-label { font-size: 0.7rem; opacity: 0.8; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-.resume-title { font-size: 1.1rem; font-weight: 800; margin-top: 2px; }
-.resume-btn {
-    background: rgba(255,255,255,0.2);
-    padding: 8px 16px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    backdrop-filter: blur(4px);
+    padding: 0 20px;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+    z-index: 100;
 }
 
+.mushaf-nav-btn {
+    background: var(--secondary);
+    color: var(--dark);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.mushaf-page-info {
+    font-weight: 700;
+    font-size: 0.9rem;
+    background: rgba(0,0,0,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+/* Force light mode for pages always */
+.page {
+    background-color: #fdf6e3 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .mushaf-footer {
+        padding: 0 12px;
+        height: 64px;
+    }
+    .mushaf-nav-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+}
 /* ── PDF OVERLAY ──────────────────────────── */
 .pdf-overlay {
     position: fixed;
