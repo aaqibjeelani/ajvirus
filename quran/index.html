@@ -114,6 +114,13 @@
             text-align: center;
         }
 
+        /* Auto-hide if already installed */
+        @media (display-mode: standalone) {
+            #installBanner, .install-banner { display: none !important; }
+            #settingsInstallBtn { display: none !important; }
+            #settingsInstallInfo { display: block !important; }
+        }
+
         /* ── PWA UPDATE BANNER ──────────────────────────── */
         #updateBanner {
             position: fixed;

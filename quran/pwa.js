@@ -98,6 +98,7 @@
   });
 
   function showInstallBanner() {
+    if (isInStandaloneMode()) return;
     const banner = document.getElementById('installBanner');
     if (banner) banner.classList.add('visible');
   }
@@ -144,7 +145,8 @@
 
   function isInStandaloneMode() {
     return window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true;
+      window.navigator.standalone === true ||
+      localStorage.getItem('al_noor_installed') === 'true';
   }
 
   function showIosInstallModal() {
@@ -182,7 +184,10 @@
     // If already installed (standalone mode)
     if (isInStandaloneMode()) {
       isInstalled = true;
+      hideInstallBanner();
+      const settingsBtn = document.getElementById('settingsInstallBtn');
       const settingsInfo = document.getElementById('settingsInstallInfo');
+      if (settingsBtn) settingsBtn.style.display = 'none';
       if (settingsInfo) settingsInfo.style.display = 'block';
     }
   });
