@@ -46,11 +46,17 @@
   }
 
   window.reloadForUpdate = function () {
+    hideUpdateBanner();
     if (swRegistration && swRegistration.waiting) {
       swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
     }
     window.location.reload();
   };
+
+  function hideUpdateBanner() {
+    const banner = document.getElementById('updateBanner');
+    if (banner) banner.classList.remove('visible');
+  }
 
   // ── Install Prompt (Android / Desktop Chrome) ────────────────────────────
   window.addEventListener('beforeinstallprompt', (e) => {
@@ -58,14 +64,18 @@
     deferredInstallPrompt = e;
     console.log('[PWA] Install prompt captured');
 
-    // Don't show if already dismissed recently
-    const dismissed = localStorage.getItem('al_noor_install_dismissed');
+    // Don't show if already dismissed recently OR already installed
+    if (isInStandaloneMode()) return;
+    
+    const dismissed = localStorage.getItem('al_no_install_dismissed');
     const dismissedAt = parseInt(dismissed || '0');
     const threeDays = 3 * 24 * 60 * 60 * 1000;
     if (Date.now() - dismissedAt < threeDays) return;
 
     // Show install banner after 3 seconds
-    setTimeout(() => showInstallBanner(), 3000);
+    setTimeout(() => {
+      if (!isInStandaloneMode()) showInstallBanner();
+    }, 3000);
 
     // Show install button in settings
     const settingsBtn = document.getElementById('settingsInstallBtn');
@@ -178,13 +188,24 @@
   });
 
   // ── Offline / Online Detection ───────────────────────────────────────────
-  function updateOnlineStatus() {
+  async function updateOnlineStatus() {
     const indicator = document.getElementById('offlineIndicator');
     if (!indicator) return;
 
-    if (!navigator.onLine) {
+    let isActuallyOnline = navigator.onLine;
+    
+    // Double check with a small fetch if navigator.onLine is true
+    if (isActuallyOnline) {
+      try {
+        const response = await fetch('icons/icon-16.png', { method: 'HEAD', cache: 'no-store' });
+        isActuallyOnline = response.ok;
+      } catch (e) {
+        isActuallyOnline = false;
+      }
+    }
+
+    if (!isActuallyOnline) {
       indicator.classList.add('visible');
-      if (typeof showToast === 'function') showToast('📵 You are offline — cached content available');
     } else {
       indicator.classList.remove('visible');
     }
@@ -192,7 +213,6 @@
 
   window.addEventListener('online', () => {
     updateOnlineStatus();
-    if (typeof showToast === 'function') showToast('✅ Back online');
   });
   window.addEventListener('offline', updateOnlineStatus);
 
