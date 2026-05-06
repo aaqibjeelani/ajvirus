@@ -556,8 +556,17 @@ async function openMushaf(id, type = 'surah') {
 
 async function initMushafFlipBook() {
     const container = document.getElementById('flipBook');
-    container.innerHTML = ''; // Clear
+    if (!container) return;
+    
+    if (typeof St === 'undefined' || !St.PageFlip) {
+        console.error("PageFlip library not loaded. Check connection or CSP.");
+        return Promise.reject("Library not loaded");
+    }
+
+    container.innerHTML = ''; 
     container.style.display = 'block';
+    container.style.visibility = 'visible';
+    container.style.opacity = '1';
 
     // Fixed pixel dimensions for absolute control
     const bookW = 450;
@@ -578,7 +587,8 @@ async function initMushafFlipBook() {
             <div class="page-content">
                 <div class="page-loading"><div class="spinner-small"></div></div>
                 <img src="pages/${pageNum}.png" class="mushaf-img" alt="Page ${i}" loading="lazy"
-                     onload="if(this.previousElementSibling)this.previousElementSibling.remove()">
+                     onload="if(this.previousElementSibling)this.previousElementSibling.remove()"
+                     onerror="console.error('Failed to load page:', this.src); this.src='pages/001.png';">
             </div>
         `;
         fragment.appendChild(pageDiv);
