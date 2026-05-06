@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1e6f5c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Al-Noor — Quran & Hadith | Aaqib Jeelani</title>
+    <meta name="description"
+        content="Al-Noor: Read Quran with translation, browse Hadith collections, get accurate prayer times, and more. Built by Aaqib Jeelani.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;700&family=Outfit:wght@400;600;700;800&family=Scheherazade+New:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="quran.css">
+</head>
+
+<body>
+    <div class="status-bar"></div>
+
+    <!-- App Header -->
+    <header class="app-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="header-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+            <div>
+                <div class="app-title">Al-<span>Noor</span></div>
+                <div style="font-size: 0.7rem; opacity: 0.8;">by Aaqib Jeelani</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="header-btn" id="darkToggleBtn" onclick="toggleDarkMode()"
+                aria-label="Toggle Dark Mode">🌙</button>
+            <button class="header-btn" onclick="showSearch()" aria-label="Search">🔍</button>
+            <button class="header-btn" onclick="openSettingsModal()" aria-label="Settings">⚙️</button>
+        </div>
+    </header>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-panel" id="sidebarPanel">
+        <div class="sidebar-header">
+            <div class="sidebar-title">📑 Surah List</div>
+            <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+        </div>
+        <div class="sidebar-list" id="sidebarList"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-area" id="mainArea">
+        <!-- Prayer Times Card -->
+        <div class="prayer-card">
+            <div class="prayer-header-row">
+                <div class="prayer-location">
+                    <span>📍</span>
+                    <span id="prayerLocationLabel">Loading location...</span>
+                </div>
+                <button class="prayer-settings-btn" onclick="openPrayerModal()">⚙️ Settings</button>
+            </div>
+            <div class="prayer-grid" id="prayerGrid">
+                <div class="prayer-box">
+                    <div class="prayer-name">Fajr</div>
+                    <div class="prayer-time">--:--</div>
+                </div>
+                <div class="prayer-box">
+                    <div class="prayer-name">Sunrise</div>
+                    <div class="prayer-time">--:--</div>
+                </div>
+                <div class="prayer-box">
+                    <div class="prayer-name">Dhuhr</div>
+                    <div class="prayer-time">--:--</div>
+                </div>
+                <div class="prayer-box">
+                    <div class="prayer-name">Asr</div>
+                    <div class="prayer-time">--:--</div>
+                </div>
+                <div class="prayer-box">
+                    <div class="prayer-name">Maghrib</div>
+                    <div class="prayer-time">--:--</div>
+                </div>
+                <div class="prayer-box">
+                    <div class="prayer-name">Isha</div>
+                    <div class="prayer-time">--:--</div>
+                </div>
+            </div>
+            <div class="next-prayer-bar">
+                <div>
+                    <div class="next-label">Next Prayer</div>
+                    <div class="next-time" id="nextPrayerName">–</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="hijri-date" id="hijriDateDisplay">-- --- ----</div>
+                    <div class="countdown" id="prayerCountdown">–</div>
+                </div>
+            </div>
+        </div>
+        <!-- Dynamic Content -->
+        <div id="dynamicContent"></div>
+    </main>
+
+    <!-- ── PRAYER SETTINGS MODAL ─────────────────── -->
+    <div class="modal-overlay" id="prayerModal" onclick="closePrayerModal(event)">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <div class="modal-title">🕌 Prayer Time Settings</div>
+                <button class="modal-close" onclick="closePrayerModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <div class="setting-label">City / Location</div>
+                    <select class="setting-select" id="citySelect">
+                        <option value="34.0837,74.7973,Asia/Kolkata,Srinagar, Jammu &amp; Kashmir">Srinagar, J&amp;K
+                            (India)</option>
+                        <option value="28.6139,77.2090,Asia/Kolkata,New Delhi, India">New Delhi, India</option>
+                        <option value="19.0760,72.8777,Asia/Kolkata,Mumbai, India">Mumbai, India</option>
+                        <option value="12.9716,77.5946,Asia/Kolkata,Bengaluru, India">Bengaluru, India</option>
+                        <option value="24.8607,67.0011,Asia/Karachi,Karachi, Pakistan">Karachi, Pakistan</option>
+                        <option value="33.6844,73.0479,Asia/Karachi,Islamabad, Pakistan">Islamabad, Pakistan</option>
+                        <option value="31.5204,74.3587,Asia/Karachi,Lahore, Pakistan">Lahore, Pakistan</option>
+                        <option value="23.8103,90.4125,Asia/Dhaka,Dhaka, Bangladesh">Dhaka, Bangladesh</option>
+                        <option value="21.3891,39.8579,Asia/Riyadh,Makkah, Saudi Arabia">Makkah, Saudi Arabia</option>
+                        <option value="24.7136,46.6753,Asia/Riyadh,Riyadh, Saudi Arabia">Riyadh, Saudi Arabia</option>
+                        <option value="25.2048,55.2708,Asia/Dubai,Dubai, UAE">Dubai, UAE</option>
+                        <option value="30.0444,31.2357,Africa/Cairo,Cairo, Egypt">Cairo, Egypt</option>
+                        <option value="51.5074,-0.1278,Europe/London,London, UK">London, UK</option>
+                        <option value="48.8566,2.3522,Europe/Paris,Paris, France">Paris, France</option>
+                        <option value="40.7128,-74.0060,America/New_York,New York, USA">New York, USA</option>
+                        <option value="34.0522,-118.2437,America/Los_Angeles,Los Angeles, USA">Los Angeles, USA</option>
+                        <option value="43.6532,-79.3832,America/Toronto,Toronto, Canada">Toronto, Canada</option>
+                        <option value="custom,custom,custom,Custom Coordinates">📍 Use My Location (GPS)</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <div class="setting-label">Calculation Method</div>
+                    <select class="setting-select" id="methodSelect">
+                        <option value="1">University of Islamic Sciences, Karachi</option>
+                        <option value="2">Islamic Society of North America (ISNA)</option>
+                        <option value="3">Muslim World League (MWL)</option>
+                        <option value="4">Umm Al-Qura, Makkah</option>
+                        <option value="5">Egyptian General Authority of Survey</option>
+                        <option value="7">Institute of Geophysics, Tehran</option>
+                        <option value="8">Gulf Region</option>
+                        <option value="9">Kuwait</option>
+                        <option value="10">Qatar</option>
+                        <option value="11">Majlis Ugama Islam Singapura</option>
+                        <option value="12">Union Organization Islamic de France</option>
+                        <option value="13">Diyanet İşleri Başkanlığı, Turkey</option>
+                        <option value="14">Spiritual Administration of Muslims of Russia</option>
+                        <option value="15">Moonsighting Committee Worldwide</option>
+                        <option value="99">Custom Angles</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <div class="setting-label">Asr Juristic School</div>
+                    <select class="setting-select" id="schoolSelect">
+                        <option value="1">Hanafi (Shadow 2× object height)</option>
+                        <option value="0">Shafi / Maliki / Hanbali (Shadow 1× height)</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="applyPrayerSettings()">✅ Apply Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── APP SETTINGS MODAL ───────────────────── -->
+    <div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <div class="modal-title">⚙️ App Settings</div>
+                <button class="modal-close" onclick="closeSettingsModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <div class="setting-label">Appearance</div>
+                    <div class="toggle-row">
+                        <div>
+                            <div class="toggle-info">🌙 Dark Mode</div>
+                            <div class="toggle-sub">Easy on the eyes at night</div>
+                        </div>
+                        <button class="toggle-switch" id="darkToggle" onclick="toggleDarkMode()"></button>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <div class="setting-label">Font Size</div>
+                    <div class="font-size-btns">
+                        <button class="font-btn" onclick="setFontSize('small',this)">A</button>
+                        <button class="font-btn active" onclick="setFontSize('medium',this)">Aa</button>
+                        <button class="font-btn" onclick="setFontSize('large',this)"
+                            style="font-size:1.1rem">AA</button>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <div class="setting-label">Translation</div>
+                    <select class="setting-select" id="translationSelect" onchange="changeTranslation(this.value)">
+                        <option value="en.sahih">Sahih International (English)</option>
+                        <option value="en.pickthall">Pickthall (English)</option>
+                        <option value="en.yusufali">Yusuf Ali (English)</option>
+                        <option value="en.asad">Muhammad Asad (English)</option>
+                        <option value="ur.jalandhry">Jalandhry (Urdu)</option>
+                        <option value="ur.ahmadali">Ahmed Ali (Urdu)</option>
+                        <option value="ur.ahmedalilahoripk">Ahmed Ali Lahori (Urdu)</option>
+                        <option value="fr.hamidullah">Hamidullah (French)</option>
+                        <option value="de.bubenheim">Bubenheim (German)</option>
+                        <option value="tr.diyanet">Diyanet (Turkish)</option>
+                        <option value="id.indonesian">Indonesian</option>
+                        <option value="ru.kuliev">Kuliev (Russian)</option>
+                        <option value="zh.majian">Ma Jian (Chinese)</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <div class="setting-label">Reciter (Audio)</div>
+                    <select class="setting-select" id="reciterSelect" onchange="changeReciter(this.value)">
+                        <option value="ar.alafasy">Mishary Alafasy</option>
+                        <option value="ar.abdulbasitmurattal">Abdul Basit (Murattal)</option>
+                        <option value="ar.abdullahbasfar">Abdullah Basfar</option>
+                        <option value="ar.hudhaify">Ali Al-Hudhaify</option>
+                        <option value="ar.minshawi">Mohamed Siddiq Al-Minshawi</option>
+                        <option value="ar.shaatree">Abu Bakr Al-Shatri</option>
+                        <option value="ar.mahermuaiqly">Maher Al Muaiqly</option>
+                        <option value="ar.parhizgar">Parhizgar</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Player Sheet -->
+    <div class="audio-sheet" id="audioSheet">
+        <div class="audio-info">
+            <div class="audio-surah" id="audioSurah">Select a verse</div>
+            <div class="audio-verse" id="audioVerse">Tap play on any verse</div>
+        </div>
+        <div class="audio-progress-container">
+            <div class="audio-progress" id="audioProgress"></div>
+        </div>
+        <div class="audio-controls">
+            <button class="audio-btn" onclick="stopAudio()">⏹️</button>
+            <button class="audio-btn play" onclick="togglePlay()" id="playBtn">▶️</button>
+            <button class="audio-btn" onclick="closeAudio()">✕</button>
+        </div>
+    </div>
+
+    <!-- FAB -->
+    <button class="fab" id="audioFab" onclick="toggleAudioSheet()">🎵</button>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('quran')" data-tab="quran">
+            <span class="nav-icon">📖</span><span>Quran</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('hadith')" data-tab="hadith">
+            <span class="nav-icon">📚</span><span>Hadith</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('search')" data-tab="search">
+            <span class="nav-icon">🔍</span><span>Search</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('bookmarks')" data-tab="bookmarks">
+            <span class="nav-icon">🔖</span><span>Saved</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('tasbeeh')" data-tab="tasbeeh">
+            <span class="nav-icon">📿</span><span>Tasbeeh</span>
+        </button>
+        <button class="nav-item" onclick="toggleReadingMode()" id="navReading">
+            <span class="nav-icon">📖</span><span>Tilawat</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('about')" data-tab="about">
+            <span class="nav-icon">👤</span><span>About</span>
+        </button>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Mushaf Viewer Overlay -->
+    <div class="mushaf-overlay" id="mushafOverlay">
+        <div class="mushaf-header">
+            <button class="mushaf-close-btn" onclick="closeMushaf()">✕ Exit</button>
+            <div class="mushaf-title-group" onclick="toggleMushafSelector()">
+                <div class="mushaf-title" id="mushafTitle">Surah Name</div>
+                <div class="mushaf-juz-info" id="mushafJuzInfo">Juz -- • -- pages left</div>
+            </div>
+            <button class="header-btn" onclick="toggleMushafSelector()">📑</button>
+        </div>
+
+        <!-- Inner Mushaf Selector -->
+        <div class="mushaf-selector" id="mushafSelector">
+            <div class="sidebar-header">
+                <div class="mushaf-selector-tabs">
+                    <button class="mushaf-tab active" id="tabMushafSurah"
+                        onclick="renderMushafSelector('surah')">Surah</button>
+                    <button class="mushaf-tab" id="tabMushafJuz" onclick="renderMushafSelector('juz')">Juz
+                        (Para)</button>
+                </div>
+                <button class="sidebar-close" onclick="toggleMushafSelector()">✕</button>
+            </div>
+            <div class="sidebar-list" id="mushafSelectorList"></div>
+        </div>
+
+        <div class="mushaf-content" id="mushafContent">
+            <div class="mushaf-page" id="mushafPage">
+                <div class="mushaf-inner-border">
+                    <div class="mushaf-text-container" id="mushafTextContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="quran.js"></script>
+</body>
+
+</html>
