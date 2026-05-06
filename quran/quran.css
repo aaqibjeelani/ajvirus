@@ -1954,3 +1954,117 @@ body {
 .mushaf-text .translation-text {
     display: none !important;
 }
+
+/* ── MUSHAF READING MODE (INDO-PAK) ──────────────── */
+.mushaf-overlay {
+    position: fixed;
+    inset: 0;
+    background: #fdfdfd;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+.mushaf-overlay.active { visibility: visible; opacity: 1; }
+
+.mushaf-header {
+    background: #1e6f5c;
+    color: #fff;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.mushaf-content {
+    flex: 1;
+    overflow-y: auto;
+    background: #f5f5f5;
+    padding: 20px 10px;
+}
+
+.mushaf-page {
+    max-width: 500px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    padding: 30px 20px;
+    min-height: 100%;
+    position: relative;
+}
+
+.mushaf-text {
+    font-family: 'Scheherazade New', serif;
+    font-size: 2.2rem;
+    line-height: 3.8rem;
+    text-align: justify;
+    direction: rtl;
+    color: #2c3e50;
+    word-spacing: 4px;
+}
+
+.ayah-end {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 4px;
+    vertical-align: middle;
+    border: 1px solid #cbd5e1;
+}
+
+/* 13 Line Simulation Background */
+.mushaf-inner-border {
+    position: relative;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    background: repeating-linear-gradient(
+        transparent,
+        transparent calc(3.8rem - 1px),
+        #f1f5f9 3.8rem
+    );
+    background-attachment: local;
+}
+
+/* ── SAJDAH & JUZ HIGHLIGHTS ─────────────────── */
+.sajdah-highlight {
+    background: rgba(255, 202, 40, 0.2);
+    border-bottom: 2px solid #ffca28;
+    padding: 2px 0;
+}
+.juz-start-highlight {
+    background: rgba(30, 111, 92, 0.1);
+    border-bottom: 2px solid #1e6f5c;
+    padding: 2px 0;
+}
+
+/* ── PDF OVERLAY ──────────────────────────── */
+.pdf-overlay {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+    transform: translateY(100%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pdf-overlay.active {
+    visibility: visible;
+    transform: translateY(0);
+}
+.pdf-viewer-frame {
+    flex: 1;
+    border: none;
+    width: 100%;
+}

@@ -871,6 +871,18 @@ function renderHadithBooks() {
                 `).join('')}
             </div>
             <div id="hadithContent"></div>
+
+            <div class="card-header" style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px;">
+                <div class="card-title">Islamic Library</div>
+                <div class="card-subtitle">Supplications & Books</div>
+            </div>
+            <div class="hadith-grid">
+                <div class="hadith-tile" onclick="openMunajat()">
+                    <div class="hadith-icon">📖</div>
+                    <div class="hadith-name">Munajat-e-Maqbool</div>
+                    <div class="hadith-author">Maulana Ashraf Ali Thanwi</div>
+                </div>
+            </div>
         </div>
     `;
 }
@@ -1156,7 +1168,13 @@ function startTasbeeh(idx) {
 
     window.incrementTasbeeh = () => {
         state.currentTasbeeh.count++;
-        if (navigator.vibrate) navigator.vibrate(50);
+        // Target Reached Alert (Every 100 counts)
+        if (state.currentTasbeeh.count > 0 && state.currentTasbeeh.count % 100 === 0) {
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 500]);
+            showToast(`MashaAllah! ${state.currentTasbeeh.count} reached.`);
+        } else {
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
         updateUI();
     };
 
@@ -1280,3 +1298,12 @@ window.addEventListener('load', () => {
         }
     }
 });
+// PDF Viewer
+function openMunajat() {
+    const overlay = document.getElementById('pdfOverlay');
+    if (overlay) overlay.classList.add('active');
+}
+function closePdf() {
+    const overlay = document.getElementById('pdfOverlay');
+    if (overlay) overlay.classList.remove('active');
+}
