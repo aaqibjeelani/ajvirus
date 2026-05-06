@@ -188,23 +188,11 @@
   });
 
   // ── Offline / Online Detection ───────────────────────────────────────────
-  async function updateOnlineStatus() {
+  function updateOnlineStatus() {
     const indicator = document.getElementById('offlineIndicator');
     if (!indicator) return;
 
-    let isActuallyOnline = navigator.onLine;
-    
-    // Double check with a small fetch if navigator.onLine is true
-    if (isActuallyOnline) {
-      try {
-        const response = await fetch('icons/icon-16.png', { method: 'HEAD', cache: 'no-store' });
-        isActuallyOnline = response.ok;
-      } catch (e) {
-        isActuallyOnline = false;
-      }
-    }
-
-    if (!isActuallyOnline) {
+    if (!navigator.onLine) {
       indicator.classList.add('visible');
     } else {
       indicator.classList.remove('visible');
