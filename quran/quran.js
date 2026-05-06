@@ -384,7 +384,24 @@ function getGlobalAyahNumber(surah, verse) {
 async function loadSurah(number) {
     state.currentSurah = number;
     const container = document.getElementById('dynamicContent');
-    container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading Surah...</p></div>';
+
+    // Resume Card
+    const lastSurah = localStorage.getItem('mushaf_last_surah');
+    const lastTitle = localStorage.getItem('mushaf_last_title');
+    let resumeHtml = '';
+    if (lastSurah) {
+        resumeHtml = `
+            <div class="resume-card" onclick="openMushaf(${lastSurah}, '${localStorage.getItem('mushaf_mode') || 'surah'}', 0)">
+                <div class="resume-info">
+                    <div class="resume-label">CONTINUE READING</div>
+                    <div class="resume-title">${lastTitle || 'Last Session'}</div>
+                </div>
+                <div class="resume-btn">Resume 📖</div>
+            </div>
+        `;
+    }
+
+    container.innerHTML = `${resumeHtml}<div class="loading"><div class="spinner"></div><p>Loading Surah...</p></div>`;
 
     try {
         const [arabicRes, transRes] = await Promise.all([
@@ -589,27 +606,57 @@ async function loadMushafData(id, type = 'surah') {
         textContainer.innerHTML = `
             <div class="mushaf-text">
                 ${ayahs.map((a, i) => {
-            const isSajda = state.mushaf.sajdas.includes(a.number);
-            const isJuzStart = (a.numberInSurah === 1 && i === 0);
-            const highlightClass = isSajda ? 'sajdah-highlight' : (isJuzStart ? 'juz-start-highlight' : '');
-
-            let header = '';
-            if (a.numberInSurah === 1) {
-                const sNum = a.surah?.number || (type === 'surah' ? apiData.number : null);
-                const sName = a.surah?.englishName || (type === 'surah' ? apiData.englishName : '');
-
-                if (sNum !== 1) {
-                    header = `<div class="mushaf-surah-separator">${sName}</div>`;
-                    if (sNum !== 9 && !a.text.includes(bismillahStr)) {
-                        header += `<div class="bismillah-mushaf">${bismillahStr}</div>`;
+                    const isSajda = state.mushaf.sajdas.includes(a.number);
+                    // Detect Juz Start (Para start)
+                    let juzHeader = '';
+                    if (a.juz !== (ayahs[i-1]?.juz)) {
+                         juzHeader = `<div class="juz-separator">Juz (Para) ${a.juz} Started</div>`;
                     }
-                }
-            }
 
-            return `${header}<span class="${highlightClass}">${a.text}</span> <span class="ayah-end">${a.numberInSurah}</span>`;
-        }).join(' ')}
+                    const highlightClass = isSajda ? 'sajdah-highlight' : '';
+
+                    let surahHeader = '';
+                    let cleanText = a.text;
+
+                    if (a.numberInSurah === 1) {
+                        const sNum = a.surah?.number || (type === 'surah' ? apiData.number : null);
+                        const sName = a.surah?.englishName || (type === 'surah' ? apiData.englishName : '');
+
+                        if (sNum !== 1) {
+                            surahHeader = `<div class="mushaf-surah-separator">${sName}</div>`;
+                            
+                            // Strip Bismillah from text if present and show it in a dedicated row
+                            if (sNum !== 9) {
+                                const bism = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
+                                // Use regex to handle potential hidden characters or variations
+                                const bismRegex = /^بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\s*/;
+                                if (bismRegex.test(cleanText)) {
+                                    cleanText = cleanText.replace(bismRegex, '').trim();
+                                }
+                                surahHeader += `<div class="bismillah-mushaf">${bism}</div>`;
+                            }
+                        }
+                    }
+
+                    return `${juzHeader}${surahHeader}<span class="${highlightClass}">${cleanText}</span> <span class="ayah-end">${a.numberInSurah}</span>`;
+                }).join(' ')}
             </div>
         `;
+
+        // Save metadata for resume
+        localStorage.setItem('mushaf_last_title', type === 'surah' ? apiData.englishName : `Para ${id}`);
+        
+        // Save scroll position and session metadata on scroll
+        const mushafContent = document.getElementById('mushafContent');
+        if (mushafContent) {
+            mushafContent.onscroll = () => {
+                localStorage.setItem('mushaf_last_scroll', mushafContent.scrollTop);
+                localStorage.setItem('mushaf_last_surah', id);
+                localStorage.setItem('mushaf_last_juz', apiData.ayahs[0].juz);
+                localStorage.setItem('mushaf_mode', type);
+                localStorage.setItem('mushaf_last_title', type === 'surah' ? apiData.englishName : `Para ${id}`);
+            };
+        }
 
         textContainer.style.opacity = '1';
         if (loader) loader.remove();
@@ -622,8 +669,7 @@ async function loadMushafData(id, type = 'surah') {
             const savedJuz = parseInt(localStorage.getItem('mushaf_last_juz'));
             const savedMode = localStorage.getItem('mushaf_mode');
 
-            // Only restore if it's the exact same content
-            if (savedScroll && savedMode === type && (id === (type === 'surah' ? savedSurah : savedJuz))) {
+            if (savedScroll && savedMode === type && (parseInt(id) === (type === 'surah' ? savedSurah : savedJuz))) {
                 document.getElementById('mushafContent').scrollTop = savedScroll;
             } else {
                 document.getElementById('mushafContent').scrollTop = 0;

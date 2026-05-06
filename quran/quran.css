@@ -1998,13 +1998,55 @@ body {
 
 .mushaf-text {
     font-family: 'Scheherazade New', serif;
-    font-size: 2.2rem;
-    line-height: 3.8rem;
+    font-size: 2.5rem;
+    line-height: 4.2rem;
     text-align: justify;
     direction: rtl;
     color: #2c3e50;
-    word-spacing: 4px;
+    word-spacing: 6px;
 }
+
+.bismillah-mushaf {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 2.4rem;
+    color: #1e6f5c;
+    margin: 20px 0;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.mushaf-surah-separator {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    background: #1e6f5c;
+    padding: 8px;
+    border-radius: 10px;
+    margin: 30px 0 10px 0;
+    font-family: 'Outfit', sans-serif;
+}
+
+.juz-separator {
+    display: block;
+    width: 100%;
+    background: #dcfce7;
+    color: #166534;
+    text-align: center;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 30px 0 15px 0;
+    font-weight: 800;
+    font-size: 1rem;
+    border: 1px solid #bbf7d0;
+    font-family: 'Outfit', sans-serif;
+}
+
 
 .ayah-end {
     font-family: 'Outfit', sans-serif;
@@ -2027,12 +2069,6 @@ body {
     position: relative;
     padding: 10px;
     border: 1px solid #e2e8f0;
-    background: repeating-linear-gradient(
-        transparent,
-        transparent calc(3.8rem - 1px),
-        #f1f5f9 3.8rem
-    );
-    background-attachment: local;
 }
 
 /* ── SAJDAH & JUZ HIGHLIGHTS ─────────────────── */
@@ -2042,9 +2078,35 @@ body {
     padding: 2px 0;
 }
 .juz-start-highlight {
-    background: rgba(30, 111, 92, 0.1);
-    border-bottom: 2px solid #1e6f5c;
-    padding: 2px 0;
+    color: #1e6f5c;
+    font-weight: 700;
+}
+
+/* ── RESUME CARD ──────────────────────────── */
+.resume-card {
+    background: linear-gradient(135deg, #1e6f5c 0%, #184d3f 100%);
+    margin: 16px 12px;
+    padding: 16px 20px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(30, 111, 92, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.resume-card:active { transform: scale(0.98); }
+.resume-label { font-size: 0.7rem; opacity: 0.8; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.resume-title { font-size: 1.1rem; font-weight: 800; margin-top: 2px; }
+.resume-btn {
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
 }
 
 /* ── PDF OVERLAY ──────────────────────────── */
