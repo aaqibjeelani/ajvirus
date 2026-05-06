@@ -579,16 +579,24 @@ async function initMushafFlipBook() {
 
     // Create 604 pages (604 to 1) in REVERSE index
     const fragment = document.createDocumentFragment();
+    const lastPage = parseInt(localStorage.getItem('mushaf_last_page') || '1');
+    
     for (let i = 604; i >= 1; i--) {
         const pageNum = i.toString().padStart(3, '0');
         const pageDiv = document.createElement('div');
         pageDiv.className = 'page';
+        
+        // Only set src for the current target page, others use data-src for lazy loading
+        const isInitial = (i === lastPage);
+        const srcAttr = isInitial ? `src="pages/${pageNum}.png"` : '';
+        const dataSrcAttr = `data-src="pages/${pageNum}.png"`;
+        
         pageDiv.innerHTML = `
             <div class="page-content">
                 <div class="page-loading"><div class="spinner-small"></div></div>
-                <img src="pages/${pageNum}.png" class="mushaf-img" alt="Page ${i}" loading="lazy"
+                <img ${srcAttr} ${dataSrcAttr} class="mushaf-img" alt="Page ${i}" 
                      onload="if(this.previousElementSibling)this.previousElementSibling.remove()"
-                     onerror="console.error('Failed to load page:', this.src); this.src='pages/001.png';">
+                     onerror="this.src='pages/001.png';">
             </div>
         `;
         fragment.appendChild(pageDiv);
@@ -616,12 +624,18 @@ async function initMushafFlipBook() {
             mushafFlipBook.loadFromHTML(container.querySelectorAll(".page"));
             
             mushafFlipBook.on('flip', (e) => {
-                const pageIndex = e.data;
-                updateMushafUI(pageIndex);
-                localStorage.setItem('mushaf_last_page', pageIndex);
-            });
+            const libraryIndex = e.data;
+            const targetPage = 604 - libraryIndex;
+            updateMushafUI(targetPage);
+            loadMushafSurroundingPages(libraryIndex);
+        });
 
-            updateMushafUI(mushafFlipBook.getCurrentPageIndex());
+        // Initial UI and Lazy Loading
+        const initialLibraryIndex = 604 - lastPage;
+        updateMushafUI(lastPage);
+        loadMushafSurroundingPages(initialLibraryIndex);
+        mushafFlipBook.turnToPage(initialLibraryIndex);
+
             resolve();
         }, 150);
     });
@@ -638,9 +652,7 @@ function mushafPrev() {
 }
 
 function updateMushafUI(libraryIndex) {
-    // Map Library Index (0-603) back to Quran Page Number (604-1)
     const quranPage = 604 - libraryIndex;
-    
     const pageInfo = document.getElementById('mushafPageInfo');
     if (pageInfo) pageInfo.textContent = `Page ${quranPage} / 604`;
 
@@ -711,6 +723,45 @@ function toggleMushafSelector() {
     if (sel.classList.contains('active')) renderMushafSelector('surah');
 }
 
+function renderMushafSelector(type) {// Lazy load images surrounding the current library index
+function loadMushafSurroundingPages(libraryIndex) {
+    const container = document.getElementById('flipBook');
+    if (!container) return;
+    const range = 3;
+    const start = Math.max(0, libraryIndex - range);
+    const end = Math.min(603, libraryIndex + range);
+    const pages = container.querySelectorAll('.page');
+    for (let i = start; i <= end; i++) {
+        const img = pages[i]?.querySelector('.mushaf-img');
+        if (img && !img.src && img.dataset.src) {
+            img.src = img.dataset.src;
+        }
+    }
+}
+
+// Offline Juz Download helper
+async function downloadMushafJuz(juzNum) {
+    const juzPages = [1, 22, 42, 62, 82, 102, 122, 142, 162, 182, 202, 222, 242, 262, 282, 302, 322, 342, 362, 382, 402, 422, 442, 462, 482, 502, 522, 542, 562, 582, 605];
+    const startPage = juzPages[juzNum - 1];
+    const endPage = juzPages[juzNum] - 1;
+    
+    if (typeof showToast === 'function') showToast(`Downloading Juz ${juzNum} for offline use...`);
+    
+    let successCount = 0;
+    const total = endPage - startPage + 1;
+    
+    for (let p = startPage; p <= endPage; p++) {
+        const url = `pages/${p.toString().padStart(3, '0')}.png`;
+        try {
+            await fetch(url); // Service worker will cache it
+            successCount++;
+        } catch (e) {
+            console.warn(`Failed to pre-download page ${p}`);
+        }
+    }
+    
+    if (typeof showToast === 'function') showToast(`✅ Juz ${juzNum} ready offline (${successCount}/${total} pages)`);
+}
 function renderMushafSelector(type) {
     const list = document.getElementById('mushafSelectorList');
     const tabSurah = document.getElementById('tabMushafSurah');
@@ -733,8 +784,13 @@ function renderMushafSelector(type) {
         for (let i = 1; i <= 30; i++) {
             juzHtml += `
                 <div class="sidebar-item" onclick="selectJuzInMushaf(${i})">
-                    <div style="font-weight: 600;">Juz (Para) ${i}</div>
-                    <div style="font-size: 0.8rem; opacity: 0.7;">Go to Para ${i}</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                        <div>
+                            <div style="font-weight: 600;">Juz (Para) ${i}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Go to Para ${i}</div>
+                        </div>
+                        <button class="juz-download-btn" onclick="event.stopPropagation(); downloadMushafJuz(${i})" title="Download for offline">📥</button>
+                    </div>
                 </div>
             `;
         }
