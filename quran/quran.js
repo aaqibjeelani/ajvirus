@@ -385,12 +385,29 @@ async function loadSurah(number) {
     state.currentSurah = number;
     const container = document.getElementById('dynamicContent');
 
-    // Resume Card
+    // Resume Cards
     const lastSurah = localStorage.getItem('mushaf_last_surah');
     const lastTitle = localStorage.getItem('mushaf_last_title');
     let resumeHtml = '';
+    
+    // PDF Resume
+    const lastPdfUrl = localStorage.getItem('last_opened_pdf_url');
+    const lastPdfTitle = localStorage.getItem('last_opened_pdf_title');
+    if (lastPdfUrl && lastPdfTitle) {
+        resumeHtml += `
+            <div class="resume-card" onclick="openPdf('${lastPdfUrl}', '${lastPdfTitle}')" style="background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);">
+                <div class="resume-info">
+                    <div class="resume-label">LAST OPENED BOOK</div>
+                    <div class="resume-title">${lastPdfTitle}</div>
+                </div>
+                <div class="resume-btn">Open 📚</div>
+            </div>
+        `;
+    }
+
+    // Mushaf Resume
     if (lastSurah) {
-        resumeHtml = `
+        resumeHtml += `
             <div class="resume-card" onclick="openMushaf(${lastSurah}, '${localStorage.getItem('mushaf_mode') || 'surah'}', 0)">
                 <div class="resume-info">
                     <div class="resume-label">CONTINUE READING</div>
@@ -923,8 +940,13 @@ function renderHadithBooks() {
                 <div class="card-subtitle">Supplications & Books</div>
             </div>
             <div class="hadith-grid">
-                <div class="hadith-tile" onclick="openMunajat()">
+                <div class="hadith-tile" onclick="openPdf('https://drive.google.com/file/d/12zmktVCfoAJhrfjl-R33aBnVkWz7kTJV/preview', 'Al-Quran Al Kareem (13 Lined)')">
                     <div class="hadith-icon">📖</div>
+                    <div class="hadith-name">Al-Quran Al Kareem (13 Lined)</div>
+                    <div class="hadith-author">Indo-Pak Script</div>
+                </div>
+                <div class="hadith-tile" onclick="openPdf('https://quran.com.pk/Books/Munajat-e-Maqbool.pdf', 'Munajat-e-Maqbool')">
+                    <div class="hadith-icon">🤲</div>
                     <div class="hadith-name">Munajat-e-Maqbool</div>
                     <div class="hadith-author">Maulana Ashraf Ali Thanwi</div>
                 </div>
@@ -1345,10 +1367,30 @@ window.addEventListener('load', () => {
     }
 });
 // PDF Viewer
-function openMunajat() {
+function openPdf(url, title) {
     const overlay = document.getElementById('pdfOverlay');
+    const titleEl = document.getElementById('pdfViewerTitle');
+    const iframe = document.getElementById('pdfViewerFrame');
+    const downloadBtn = document.getElementById('pdfViewerDownload');
+
+    if (titleEl) titleEl.textContent = title;
+    if (iframe) iframe.src = url;
+    if (downloadBtn) {
+        // If it's a Google Drive link, provide the export/download link
+        if (url.includes('drive.google.com')) {
+            downloadBtn.href = url.replace('/preview', '/view');
+        } else {
+            downloadBtn.href = url;
+        }
+    }
+
     if (overlay) overlay.classList.add('active');
+
+    // Save state
+    localStorage.setItem('last_opened_pdf_url', url);
+    localStorage.setItem('last_opened_pdf_title', title);
 }
+
 function closePdf() {
     const overlay = document.getElementById('pdfOverlay');
     if (overlay) overlay.classList.remove('active');
