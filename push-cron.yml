@@ -1,0 +1,26 @@
+name: Tazkiya push cron
+
+# Optional fallback for hosts that cannot run a cron job.
+# Add your production cron URL as the repository secret TAZKIYA_CRON_URL
+# (Settings -> Secrets and variables -> Actions -> New repository secret).
+# Get that URL from Tazkiya -> Settings -> Web Push Notifications ->
+# "Production cron setup" while the app is open on your live domain.
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping the Tazkiya sender
+        env:
+          CRON_URL: ${{ secrets.TAZKIYA_CRON_URL }}
+        run: |
+          if [ -z "$CRON_URL" ]; then
+            echo "TAZKIYA_CRON_URL is not set; skipping."
+            exit 0
+          fi
+          curl -fsS --max-time 90 "$CRON_URL"
